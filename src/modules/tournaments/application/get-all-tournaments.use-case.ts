@@ -1,5 +1,5 @@
-import { TournamentRepositoryPort } from "../domain/tournament.repository.port";
-import { Tournament } from "../domain/tournament.entity";
+import { TournamentRepositoryPort } from '../domain/tournament.repository.port';
+import { Tournament } from '../domain/tournament.entity';
 
 export class GetAllTournamentsUseCase {
   constructor(

@@ -8,7 +8,7 @@ export class PhaseType {
     return new PhaseType(id, name);
   }
 
-  static fromPersistence(props: { id: string, name: string }): PhaseType {
+  static fromPersistence(props: { id: string; name: string }): PhaseType {
     return new PhaseType(props.id, props.name);
   }
 

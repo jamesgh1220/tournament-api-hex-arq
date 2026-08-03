@@ -33,23 +33,33 @@ export class Standing {
     }
 
     if (wins < 0) {
-      throw new Error('La cantidad de partidos ganados debe ser mayor o igual a cero.');
+      throw new Error(
+        'La cantidad de partidos ganados debe ser mayor o igual a cero.',
+      );
     }
 
     if (draws < 0) {
-      throw new Error('La cantidad de partidos empatados debe ser mayor o igual a cero.');
+      throw new Error(
+        'La cantidad de partidos empatados debe ser mayor o igual a cero.',
+      );
     }
 
     if (losses < 0) {
-      throw new Error('La cantidad de partidos perdidos debe ser mayor o igual a cero.');
+      throw new Error(
+        'La cantidad de partidos perdidos debe ser mayor o igual a cero.',
+      );
     }
 
     if (goalsFor < 0) {
-      throw new Error('La cantidad de goles a favor debe ser mayor o igual a cero.');
+      throw new Error(
+        'La cantidad de goles a favor debe ser mayor o igual a cero.',
+      );
     }
 
     if (goalsAgainst < 0) {
-      throw new Error('La cantidad de goles en contra debe ser mayor o igual a cero.');
+      throw new Error(
+        'La cantidad de goles en contra debe ser mayor o igual a cero.',
+      );
     }
 
     if (points < 0) {
@@ -73,18 +83,18 @@ export class Standing {
   }
 
   static fromPersistence(props: {
-    id: string,
-    played: number,
-    wins: number,
-    draws: number,
-    losses: number,
-    goalsFor: number,
-    goalsAgainst: number,
-    points: number,
-    tournamentId: string,
-    teamId: string,
-    phaseId?: string,
-    groupId?: string | null,
+    id: string;
+    played: number;
+    wins: number;
+    draws: number;
+    losses: number;
+    goalsFor: number;
+    goalsAgainst: number;
+    points: number;
+    tournamentId: string;
+    teamId: string;
+    phaseId?: string;
+    groupId?: string | null;
   }) {
     return new Standing(
       props.id,

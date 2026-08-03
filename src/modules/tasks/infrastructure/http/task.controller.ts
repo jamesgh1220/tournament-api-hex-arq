@@ -38,7 +38,7 @@ export class TaskController {
         dto.title,
         dto.assigneeId,
       );
-      return TaskResponseDto.fromDomain(task);  
+      return TaskResponseDto.fromDomain(task);
     } catch (error) {
       if (error instanceof InvalidAssigneeError) {
         throw new NotFoundException(error.message);
@@ -57,7 +57,7 @@ export class TaskController {
   async complete(@Param('id') id: string): Promise<TaskResponseDto> {
     try {
       const task = await this.completeTaskUseCase.execute(id);
-      return TaskResponseDto.fromDomain(task);  
+      return TaskResponseDto.fromDomain(task);
     } catch (error) {
       if (error instanceof TaskNotFoundError) {
         throw new NotFoundException(error.message);

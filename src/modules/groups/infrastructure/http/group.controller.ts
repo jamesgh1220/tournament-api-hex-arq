@@ -10,23 +10,26 @@ import {
   HttpStatus,
   Controller,
   NotFoundException,
-} from "@nestjs/common";
-import { GroupDto } from "./dto/group.dto";
+} from '@nestjs/common';
+import { GroupDto } from './dto/group.dto';
 import {
   CREATE_GROUP_USE_CASE,
   GET_GROUP_USE_CASE,
   GET_ALL_GROUPS_USE_CASE,
   DELETE_GROUP_USE_CASE,
   GET_GROUPS_BY_PHASE_USE_CASE,
-} from "../../groups.tokens";
-import { JwtAuthGuard } from "src/common/guards/jwt-auth-guard";
-import { CreateGroupUseCase } from "../../application/create-group.use-case";
-import { GetGroupUseCase } from "../../application/get-group.use-case";
-import { GetAllGroupsUseCase } from "../../application/get-all-groups.use-case";
-import { DeleteGroupUseCase } from "../../application/delete-group.use-case";
-import { GetGroupsByPhaseUseCase } from "../../application/get-groups-by-phase.use-case";
-import { GroupResponseDto } from "./dto/group-response.dto";
-import { GroupNotFoundError, GroupByPhaseNotFoundError } from "../../domain/errors";
+} from '../../groups.tokens';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth-guard';
+import { CreateGroupUseCase } from '../../application/create-group.use-case';
+import { GetGroupUseCase } from '../../application/get-group.use-case';
+import { GetAllGroupsUseCase } from '../../application/get-all-groups.use-case';
+import { DeleteGroupUseCase } from '../../application/delete-group.use-case';
+import { GetGroupsByPhaseUseCase } from '../../application/get-groups-by-phase.use-case';
+import { GroupResponseDto } from './dto/group-response.dto';
+import {
+  GroupNotFoundError,
+  GroupByPhaseNotFoundError,
+} from '../../domain/errors';
 
 @UseGuards(JwtAuthGuard)
 @Controller('groups')
@@ -70,7 +73,9 @@ export class GroupController {
   }
 
   @Get('phase/:phaseId')
-  async findByPhase(@Param('phaseId') phaseId: string): Promise<GroupResponseDto> {
+  async findByPhase(
+    @Param('phaseId') phaseId: string,
+  ): Promise<GroupResponseDto> {
     try {
       const group = await this.getGroupsByPhaseUseCase.execute(phaseId);
       return GroupResponseDto.fromDomain(group);

@@ -1,4 +1,4 @@
-import { Phase } from "./phase.entity";
+import { Phase } from './phase.entity';
 
 export interface PhaseRepositoryPort {
   create(phase: Phase): Promise<Phase>;

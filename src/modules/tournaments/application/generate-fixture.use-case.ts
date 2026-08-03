@@ -2,11 +2,12 @@ import {
   TournamentNotFoundError,
   PhaseActiveByTournamentNotFoundError,
   PhaseHasAssignedFixtureError,
-} from "../domain/errors";
-import { TournamentRepositoryPort } from "../domain/tournament.repository.port";
-import { FixtureGenerationPort } from "../domain/ports/fixture-generation.port";
-import { PhaseLookupPort } from "../domain/ports/phase-lookup.port";
+} from '../domain/errors';
+import { TournamentRepositoryPort } from '../domain/tournament.repository.port';
+import { FixtureGenerationPort } from '../domain/ports/fixture-generation.port';
+import { PhaseLookupPort } from '../domain/ports/phase-lookup.port';
 import { UnitOfWorkPort } from 'src/shared/application/ports/unit-of-work.port';
+import { StandingSetupPort } from '../domain/ports/standing-setup.port';
 
 //TODO: llevar a types generales de dominio
 export type GeneratedMatchSummary = {
@@ -24,22 +25,28 @@ export class GenerateFixtureUseCase {
     private readonly phaseLookup: PhaseLookupPort,
     private readonly fixtureGeneration: FixtureGenerationPort,
     private readonly unitOfWork: UnitOfWorkPort,
+    private readonly standingSetup: StandingSetupPort,
   ) {}
 
   async execute(tournamentId: string): Promise<GeneratedMatchSummary[]> {
     // Traer torneo con sus equipos
-    const tournament = await this.tournamentRepository.getTournamentWithTeams(tournamentId);
+    const tournament =
+      await this.tournamentRepository.getTournamentWithTeams(tournamentId);
     if (!tournament) throw new TournamentNotFoundError(tournamentId);
 
     // Validar que si existan equipos
     tournament.assertCanGenerateFixture();
 
     //Traer fase activa del torneo
-    const activePhase = await this.phaseLookup.findActiveByTournament(tournamentId);
-    if (!activePhase) throw new PhaseActiveByTournamentNotFoundError(tournamentId);
+    const activePhase =
+      await this.phaseLookup.findActiveByTournament(tournamentId);
+    if (!activePhase)
+      throw new PhaseActiveByTournamentNotFoundError(tournamentId);
 
     // Validar que esa phase no tenga partidos programados
-    const phaseHasFixture = await this.phaseLookup.hasAssignedFixture(activePhase.id);
+    const phaseHasFixture = await this.phaseLookup.hasAssignedFixture(
+      activePhase.id,
+    );
     if (phaseHasFixture) throw new PhaseHasAssignedFixtureError(activePhase.id);
 
     return this.unitOfWork.execute(async () => {
@@ -61,6 +68,16 @@ export class GenerateFixtureUseCase {
       });
 
       // luego: standingSetup.initialize(...)
+      const standings = (tournament.teams ?? []).map((team) => ({
+        tournamentId,
+        phaseId: activePhase.id,
+        teamId: team.id,
+        // No se envia groupId por ahora hasta que se hagan los otros tipos de torneos
+      }));
+      // await this.standingSetup.initialize(
+      //   tournamentId,
+
+      // );
 
       return matches;
     });

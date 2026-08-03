@@ -1,4 +1,4 @@
-import { MatchPhase } from "./value-objects/match-phase.vo";
+import { MatchPhase } from './value-objects/match-phase.vo';
 
 export class Phase {
   constructor(
@@ -31,24 +31,17 @@ export class Phase {
       throw new Error('El orden debe ser mayor que cero.');
     }
 
-    return new Phase(
-      id,
-      name,
-      status,
-      orderNumber,
-      tournamentId,
-      typeId,
-    );
+    return new Phase(id, name, status, orderNumber, tournamentId, typeId);
   }
 
   static fromPersistence(props: {
-    id: string,
-    name: string,
-    status: string,
-    orderNumber: number,
-    tournamentId: string,
-    typeId: string,
-    matches: MatchPhase[],
+    id: string;
+    name: string;
+    status: string;
+    orderNumber: number;
+    tournamentId: string;
+    typeId: string;
+    matches: MatchPhase[];
   }): Phase {
     return new Phase(
       props.id,

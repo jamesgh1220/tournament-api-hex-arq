@@ -29,17 +29,31 @@ export class MatchPhase {
     );
   }
 
-  get id() { return this._id; }
+  get id() {
+    return this._id;
+  }
 
-  get phaseId() { return this._phaseId; }
+  get phaseId() {
+    return this._phaseId;
+  }
 
-  get homeTeamId() { return this._homeTeamId; }
+  get homeTeamId() {
+    return this._homeTeamId;
+  }
 
-  get awayTeamId() { return this._awayTeamId; }
+  get awayTeamId() {
+    return this._awayTeamId;
+  }
 
-  get homeScore() { return this._homeScore; }
+  get homeScore() {
+    return this._homeScore;
+  }
 
-  get awayScore() { return this._awayScore; }
+  get awayScore() {
+    return this._awayScore;
+  }
 
-  get status() { return this._status; }
+  get status() {
+    return this._status;
+  }
 }

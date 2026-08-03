@@ -42,7 +42,9 @@ export class PhaseNotFoundError extends Error {
 
 export class PhaseActiveByTournamentNotFoundError extends Error {
   constructor(tournamentId: string) {
-    super(`La fase activa para el torneo con id ${tournamentId} no se ha encontrado.`);
+    super(
+      `La fase activa para el torneo con id ${tournamentId} no se ha encontrado.`,
+    );
     this.name = 'PhaseActiveByTournamentNotFoundError';
   }
 }

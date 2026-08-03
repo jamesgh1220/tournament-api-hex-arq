@@ -1,4 +1,4 @@
-import { Phase } from "src/modules/phases/domain/phase.entity";
+import { Phase } from 'src/modules/phases/domain/phase.entity';
 
 export class PhaseResponseDto {
   id: string;

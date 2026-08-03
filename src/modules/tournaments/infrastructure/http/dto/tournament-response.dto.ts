@@ -1,4 +1,4 @@
-import { Tournament } from "src/modules/tournaments/domain/tournament.entity";
+import { Tournament } from 'src/modules/tournaments/domain/tournament.entity';
 
 export class TournamentResponseDto {
   id: string;

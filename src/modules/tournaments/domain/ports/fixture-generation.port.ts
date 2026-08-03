@@ -17,5 +17,7 @@ export type GeneratedMatchSummary = {
 };
 
 export interface FixtureGenerationPort {
-  generateAndPersist(command: GenerateFixtureCommand): Promise<GeneratedMatchSummary[]>;
+  generateAndPersist(
+    command: GenerateFixtureCommand,
+  ): Promise<GeneratedMatchSummary[]>;
 }

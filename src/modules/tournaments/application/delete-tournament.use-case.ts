@@ -1,5 +1,5 @@
-import { TournamentRepositoryPort } from "../domain/tournament.repository.port";
-import { TournamentNotFoundError } from "../domain/errors";
+import { TournamentRepositoryPort } from '../domain/tournament.repository.port';
+import { TournamentNotFoundError } from '../domain/errors';
 
 export class DeleteTournamentUseCase {
   constructor(

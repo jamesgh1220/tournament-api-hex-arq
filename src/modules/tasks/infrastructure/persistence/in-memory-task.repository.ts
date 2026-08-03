@@ -1,5 +1,5 @@
-import { Task } from "../../domain/tasks.entity";
-import { TaskRepositoryPort } from "../../domain/task.reporitory.port";
+import { Task } from '../../domain/tasks.entity';
+import { TaskRepositoryPort } from '../../domain/task.reporitory.port';
 
 export class InMemoryTaskRepository implements TaskRepositoryPort {
   private readonly tasks: Map<string, Task> = new Map();

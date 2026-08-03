@@ -1,6 +1,7 @@
 import {
   Get,
   Post,
+  Patch,
   Body,
   Param,
   Inject,
@@ -10,21 +11,25 @@ import {
   HttpStatus,
   Controller,
   NotFoundException,
-} from "@nestjs/common";
-import { MatchDto } from "./dto/match.dto";
+} from '@nestjs/common';
+import { MatchDto } from './dto/match.dto';
+import { UpdateMatchDto } from './dto/update-match.dto';
 import {
   CREATE_MATCH_USE_CASE,
   DELETE_MATCH_USE_CASE,
   GET_MATCH_USE_CASE,
   GET_ALL_MATCHES_USE_CASE,
-} from "../../match.tokens";
-import { CreateMatchUseCase } from "../../application/create-match.use-case";
-import { DeleteMatchUseCase } from "../../application/delete-match.use-case";
-import { GetMatchUseCase } from "../../application/get-match.use-case";
-import { GetAllMatchesUseCase } from "../../application/get-all-matches.use-cases";
-import { JwtAuthGuard } from "src/common/guards/jwt-auth-guard";
-import { MatchResponseDto } from "./dto/match-response.dto";
-import { MatchNotFoundError } from "../../domain/errors";
+  UPDATE_MATCH_USE_CASE,
+} from '../../match.tokens';
+import { CreateMatchUseCase } from '../../application/create-match.use-case';
+import { DeleteMatchUseCase } from '../../application/delete-match.use-case';
+import { GetMatchUseCase } from '../../application/get-match.use-case';
+import { GetAllMatchesUseCase } from '../../application/get-all-matches.use-cases';
+import { UpdateMatchUseCase } from '../../application/update-match.use-case';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth-guard';
+import { MatchResponseDto } from './dto/match-response.dto';
+import { MatchNotFoundError } from '../../domain/errors';
+import { MatchUpdateData } from '../../domain/match.entity';
 
 @UseGuards(JwtAuthGuard)
 @Controller('matches')
@@ -38,6 +43,8 @@ export class MatchController {
     private readonly getMatchUseCase: GetMatchUseCase,
     @Inject(GET_ALL_MATCHES_USE_CASE)
     private readonly getAllMatchesUseCase: GetAllMatchesUseCase,
+    @Inject(UPDATE_MATCH_USE_CASE)
+    private readonly updateMatchUseCase: UpdateMatchUseCase,
   ) {}
 
   @Post()
@@ -55,7 +62,28 @@ export class MatchController {
 
     return MatchResponseDto.fromDomain(match);
   }
-  
+
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() dto: UpdateMatchDto,
+  ): Promise<MatchResponseDto> {
+    const data: MatchUpdateData = {
+      ...dto,
+      scheduledAt: dto.scheduledAt ? new Date(dto.scheduledAt) : undefined,
+    };
+
+    try {
+      const match = await this.updateMatchUseCase.execute(id, data);
+      return MatchResponseDto.fromDomain(match);
+    } catch (error) {
+      if (error instanceof MatchNotFoundError) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+  }
+
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id') id: string): Promise<void> {

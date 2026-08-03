@@ -26,10 +26,22 @@ export class PhaseTournament {
     );
   }
 
-  get id() { return this._id; }
-  get name() { return this._name; }
-  get status() { return this._status; }
-  get orderNumber() { return this._orderNumber; }
-  get tournamentId() { return this._tournamentId; }
-  get typeId() { return this._typeId; }
+  get id() {
+    return this._id;
+  }
+  get name() {
+    return this._name;
+  }
+  get status() {
+    return this._status;
+  }
+  get orderNumber() {
+    return this._orderNumber;
+  }
+  get tournamentId() {
+    return this._tournamentId;
+  }
+  get typeId() {
+    return this._typeId;
+  }
 }

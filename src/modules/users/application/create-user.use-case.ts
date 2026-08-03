@@ -9,7 +9,12 @@ export class CreateUserUseCase {
     private readonly userRepository: UserRepositoryPort,
   ) {}
 
-  async execute(name: string, email: string, password: string, role: string): Promise<User> {
+  async execute(
+    name: string,
+    email: string,
+    password: string,
+    role: string,
+  ): Promise<User> {
     const exists = await this.userRepository.findByEmail(email);
     if (exists) {
       throw new Error('El email ya está en uso');

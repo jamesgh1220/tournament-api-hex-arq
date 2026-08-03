@@ -1,6 +1,6 @@
-import { GroupRepositoryPort } from "../domain/group.repository.port";
-import { Group } from "../domain/group.entity";
-import { GroupNotFoundError } from "../domain/errors";
+import { GroupRepositoryPort } from '../domain/group.repository.port';
+import { Group } from '../domain/group.entity';
+import { GroupNotFoundError } from '../domain/errors';
 
 export class GetGroupUseCase {
   constructor(private readonly groupRepository: GroupRepositoryPort) {}

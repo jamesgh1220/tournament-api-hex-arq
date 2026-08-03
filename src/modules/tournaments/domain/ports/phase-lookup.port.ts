@@ -1,4 +1,4 @@
-import { PhaseTournament } from "../value-objects/phase-tournament.vo";
+import { PhaseTournament } from '../value-objects/phase-tournament.vo';
 
 export interface PhaseLookupPort {
   findActiveByTournament(tournamentId: string): Promise<PhaseTournament>;

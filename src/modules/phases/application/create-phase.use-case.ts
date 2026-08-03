@@ -1,11 +1,9 @@
-import { randomUUID } from "crypto";
-import { Phase } from "../domain/phase.entity";
-import { PhaseRepositoryPort } from "../domain/phase.repository.port";
+import { randomUUID } from 'crypto';
+import { Phase } from '../domain/phase.entity';
+import { PhaseRepositoryPort } from '../domain/phase.repository.port';
 
 export class CreatePhaseUseCase {
-  constructor(
-    private readonly phaseRepository: PhaseRepositoryPort,
-  ) {}
+  constructor(private readonly phaseRepository: PhaseRepositoryPort) {}
 
   async execute(
     name: string,

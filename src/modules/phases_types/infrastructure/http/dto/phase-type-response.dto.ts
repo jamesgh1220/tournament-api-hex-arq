@@ -1,4 +1,4 @@
-import { PhaseType } from "src/modules/phases_types/domain/phase-type.entity";
+import { PhaseType } from 'src/modules/phases_types/domain/phase-type.entity';
 
 export class PhaseTypeResponseDto {
   id: string;

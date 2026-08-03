@@ -1,4 +1,4 @@
-import { Tournament } from "./tournament.entity";
+import { Tournament } from './tournament.entity';
 
 export interface TournamentRepositoryPort {
   create(tournament: Tournament): Promise<Tournament>;

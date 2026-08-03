@@ -1,8 +1,8 @@
-import { Inject } from "@nestjs/common";
-import { PhaseSetupPort } from "../../domain/ports/phase-setup.port";
-import { PhaseTournament } from "../../domain/value-objects/phase-tournament.vo";
-import { CREATE_PHASE_USE_CASE } from "src/modules/phases/phases.tokens";
-import { CreatePhaseUseCase } from "src/modules/phases/application/create-phase.use-case";
+import { Inject } from '@nestjs/common';
+import { PhaseSetupPort } from '../../domain/ports/phase-setup.port';
+import { PhaseTournament } from '../../domain/value-objects/phase-tournament.vo';
+import { CREATE_PHASE_USE_CASE } from 'src/modules/phases/phases.tokens';
+import { CreatePhaseUseCase } from 'src/modules/phases/application/create-phase.use-case';
 
 export class PhaseSetupAdapter implements PhaseSetupPort {
   constructor(

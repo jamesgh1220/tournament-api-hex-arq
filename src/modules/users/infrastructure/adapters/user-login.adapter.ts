@@ -7,9 +7,7 @@ import { TokenResponse } from '../../domain/interfaces/token-response';
 
 @Injectable()
 export class UserAdapter implements UserPort {
-  constructor(
-    private readonly jwtService: JwtService,
-  ) {}
+  constructor(private readonly jwtService: JwtService) {}
 
   generateToken(userData: User): TokenResponse {
     const payload = {
@@ -24,7 +22,10 @@ export class UserAdapter implements UserPort {
     return { accessToken, user: userData.toPublic() };
   }
 
-  async comparePassword(password: string, hashedPassword: string): Promise<boolean> {
+  async comparePassword(
+    password: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
     return await bcrypt.compare(password, hashedPassword);
   }
 

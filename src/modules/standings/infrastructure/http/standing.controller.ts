@@ -10,20 +10,20 @@ import {
   HttpStatus,
   Controller,
   NotFoundException,
-} from "@nestjs/common";
-import { StandingDto } from "./dto/standing.dto";
-import { StandingResponseDto } from "./dto/standing-response.dto";
+} from '@nestjs/common';
+import { StandingDto } from './dto/standing.dto';
+import { StandingResponseDto } from './dto/standing-response.dto';
 import {
   CREATE_STANDING_USE_CASE,
   GET_STANDING_BY_TOURNAMENT_USE_CASE,
   GET_STANDING_BY_TOURNAMENT_AND_TEAM_USE_CASE,
-} from "../../standing.tokens";
-import { CreateStandingUseCase } from "../../application/create-standing.use-case";
-import { GetStandingByTournamentUseCase } from "../../application/get-standing-by-tournament.use-case";
-import { GetStandingByTournamentAndTeamUseCase } from "../../application/get-standing-by-tournament-and-team.use-case";
-import { StandingByTournamentNotFoundError } from "../../domain/errors";
-import { JwtAuthGuard } from "src/common/guards/jwt-auth-guard";
-import { Standing } from "../../domain/standing.entity";
+} from '../../standing.tokens';
+import { CreateStandingUseCase } from '../../application/create-standing.use-case';
+import { GetStandingByTournamentUseCase } from '../../application/get-standing-by-tournament.use-case';
+import { GetStandingByTournamentAndTeamUseCase } from '../../application/get-standing-by-tournament-and-team.use-case';
+import { StandingByTournamentNotFoundError } from '../../domain/errors';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth-guard';
+import { Standing } from '../../domain/standing.entity';
 
 @UseGuards(JwtAuthGuard)
 @Controller('standings')
@@ -57,9 +57,12 @@ export class StandingController {
   }
 
   @Get('tournament/:tournamentId')
-  async getByTournament(@Param('tournamentId') tournamentId: string): Promise<StandingResponseDto> {
+  async getByTournament(
+    @Param('tournamentId') tournamentId: string,
+  ): Promise<StandingResponseDto> {
     try {
-      const standing = await this.getStandingByTournamentUseCase.execute(tournamentId);
+      const standing =
+        await this.getStandingByTournamentUseCase.execute(tournamentId);
       return StandingResponseDto.fromDomain(standing);
     } catch (error) {
       if (error instanceof StandingByTournamentNotFoundError) {
@@ -75,7 +78,10 @@ export class StandingController {
     @Param('teamId') teamId: string,
   ): Promise<StandingResponseDto> {
     try {
-      const standing = await this.getStandingByTournamentAndTeamUseCase.execute(tournamentId, teamId);
+      const standing = await this.getStandingByTournamentAndTeamUseCase.execute(
+        tournamentId,
+        teamId,
+      );
       return StandingResponseDto.fromDomain(standing);
     } catch (error) {
       if (error instanceof StandingByTournamentNotFoundError) {

@@ -10,21 +10,24 @@ import {
   HttpStatus,
   Controller,
   NotFoundException,
-} from "@nestjs/common";
-import { PhaseDto } from "./dto/phase.dto";
+} from '@nestjs/common';
+import { PhaseDto } from './dto/phase.dto';
 import {
   CREATE_PHASE_USE_CASE,
   GET_PHASE_BY_STATUS_USE_CASE,
   GET_PHASE_BY_TOURNAMENT_USE_CASE,
   HAS_ASSIGNED_FIXTURE_PHASE_USE_CASE,
-} from "../../phases.tokens";
-import { CreatePhaseUseCase } from "../../application/create-phase.use-case";
-import { GetPhaseByStatusUseCase } from "../../application/get-phase-by-status.use-case";
-import { GetPhaseByTournamentUseCase } from "../../application/get-phase-by-tournament.use-case";
-import { HasAssignedFixtureUseCase } from "../../application/has-assigned-fixture-phase.use-case";
-import { PhaseResponseDto } from "./dto/phase-response.dto";
-import { JwtAuthGuard } from "src/common/guards/jwt-auth-guard";
-import { PhaseByStatusNotFoundError, PhaseByTournamentNotFoundError } from "../../domain/errors";
+} from '../../phases.tokens';
+import { CreatePhaseUseCase } from '../../application/create-phase.use-case';
+import { GetPhaseByStatusUseCase } from '../../application/get-phase-by-status.use-case';
+import { GetPhaseByTournamentUseCase } from '../../application/get-phase-by-tournament.use-case';
+import { HasAssignedFixtureUseCase } from '../../application/has-assigned-fixture-phase.use-case';
+import { PhaseResponseDto } from './dto/phase-response.dto';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth-guard';
+import {
+  PhaseByStatusNotFoundError,
+  PhaseByTournamentNotFoundError,
+} from '../../domain/errors';
 
 @UseGuards(JwtAuthGuard)
 @Controller('phases')
@@ -59,7 +62,10 @@ export class PhaseController {
     @Param('status') status: string,
   ): Promise<PhaseResponseDto> {
     try {
-      const phase = await this.getPhaseByStatusUseCase.execute(tournamentId, status);
+      const phase = await this.getPhaseByStatusUseCase.execute(
+        tournamentId,
+        status,
+      );
       return PhaseResponseDto.fromDomain(phase);
     } catch (error) {
       if (error instanceof PhaseByStatusNotFoundError) {
@@ -70,9 +76,12 @@ export class PhaseController {
   }
 
   @Get('tournament/:tournamentId')
-  async getByTournament(@Param('tournamentId') tournamentId: string): Promise<PhaseResponseDto> {
+  async getByTournament(
+    @Param('tournamentId') tournamentId: string,
+  ): Promise<PhaseResponseDto> {
     try {
-      const phase = await this.getPhaseByTournamentUseCase.execute(tournamentId);
+      const phase =
+        await this.getPhaseByTournamentUseCase.execute(tournamentId);
       return PhaseResponseDto.fromDomain(phase);
     } catch (error) {
       if (error instanceof PhaseByTournamentNotFoundError) {

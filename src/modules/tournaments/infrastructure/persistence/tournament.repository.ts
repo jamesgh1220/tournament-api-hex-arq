@@ -59,9 +59,7 @@ export class TournamentRepository implements TournamentRepositoryPort {
       state: orm.state,
       configuration: orm.configuration,
       startDate: new Date(orm.startDate),
-      teams: (orm.teams ?? []).map((t) =>
-        TeamTournament.create(t.id, t.name),
-      ),
+      teams: (orm.teams ?? []).map((t) => TeamTournament.create(t.id, t.name)),
     });
   }
 

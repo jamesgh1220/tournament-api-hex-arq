@@ -1,6 +1,6 @@
-import { GroupRepositoryPort } from "../domain/group.repository.port";
-import { Group } from "../domain/group.entity";
-import { randomUUID } from "crypto";
+import { GroupRepositoryPort } from '../domain/group.repository.port';
+import { Group } from '../domain/group.entity';
+import { randomUUID } from 'crypto';
 
 export class CreateGroupUseCase {
   constructor(private readonly groupRepository: GroupRepositoryPort) {}

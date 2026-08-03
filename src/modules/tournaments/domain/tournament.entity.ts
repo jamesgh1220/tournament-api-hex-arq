@@ -1,11 +1,10 @@
-import { TeamTournament } from "./value-objects/team-tournament.vo";
-import { TournamentConfiguration } from "./value-objects/tournament-configuration.vo";
+import { TeamTournament } from './value-objects/team-tournament.vo';
+import { TournamentConfiguration } from './value-objects/tournament-configuration.vo';
 import {
   TeamAlreadyInTournamentError,
   TeamNotInTournamentError,
   InsufficientTeamsForFixtureError,
-} from "./errors";
-
+} from './errors';
 
 export class Tournament {
   private constructor(
@@ -103,6 +102,8 @@ export class Tournament {
   }
 
   shouldCreatePhaseAutomatically(): boolean {
-    return TournamentConfiguration.from(this._configuration).shouldCreatePhaseAutomatically();
+    return TournamentConfiguration.from(
+      this._configuration,
+    ).shouldCreatePhaseAutomatically();
   }
 }

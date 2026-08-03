@@ -1,4 +1,4 @@
-import { Assignee } from "./assignee.vo";
+import { Assignee } from './assignee.vo';
 
 export class Task {
   private constructor(
@@ -24,23 +24,16 @@ export class Task {
       throw new Error('La tarea debe tener un usuario asignado');
     }
 
-    return new Task(
-      id,
-      title.trim(),
-      false,
-      assigneeId,
-      assignee,
-      new Date(),
-    ); 
+    return new Task(id, title.trim(), false, assigneeId, assignee, new Date());
   }
 
   static fromPersistence(props: {
-    id: string,
-    title: string,
-    completed: boolean,
-    assigneeId: string,
-    assignee: Assignee,
-    createdAt: Date,
+    id: string;
+    title: string;
+    completed: boolean;
+    assigneeId: string;
+    assignee: Assignee;
+    createdAt: Date;
   }): Task {
     return new Task(
       props.id,

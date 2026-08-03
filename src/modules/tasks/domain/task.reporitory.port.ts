@@ -1,4 +1,4 @@
-import { Task } from "./tasks.entity";
+import { Task } from './tasks.entity';
 
 export interface TaskRepositoryPort {
   save(task: Task): Promise<void>;

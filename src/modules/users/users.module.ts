@@ -68,8 +68,10 @@ import { UserPort } from './domain/login.port';
     },
     {
       provide: LOGIN_USER_USE_CASE,
-      useFactory: (loginAdapter: UserPort, userRepository: UserRepositoryPort) =>
-        new LoginUserUseCase(loginAdapter, userRepository),
+      useFactory: (
+        loginAdapter: UserPort,
+        userRepository: UserRepositoryPort,
+      ) => new LoginUserUseCase(loginAdapter, userRepository),
       inject: [USER_ADAPTER, USER_REPOSITORY],
     },
   ],

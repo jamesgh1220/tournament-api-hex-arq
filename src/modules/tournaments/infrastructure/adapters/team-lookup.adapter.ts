@@ -1,10 +1,10 @@
-import { Inject } from "@nestjs/common";
-import { TeamLookupPort } from "../../domain/ports/team-lookup.port";
-import { TeamTournament } from "../../domain/value-objects/team-tournament.vo";
-import { GET_TEAM_USE_CASE } from "src/modules/teams/teams.tokens";
-import { GetTeamUseCase } from "src/modules/teams/application/get-team.use-case";
-import { TeamNotFoundError as TeamsTeamNotFoundError } from "src/modules/teams/domain/errors";
-import { TeamNotFoundError } from "../../domain/errors";
+import { Inject } from '@nestjs/common';
+import { TeamLookupPort } from '../../domain/ports/team-lookup.port';
+import { TeamTournament } from '../../domain/value-objects/team-tournament.vo';
+import { GET_TEAM_USE_CASE } from 'src/modules/teams/teams.tokens';
+import { GetTeamUseCase } from 'src/modules/teams/application/get-team.use-case';
+import { TeamNotFoundError as TeamsTeamNotFoundError } from 'src/modules/teams/domain/errors';
+import { TeamNotFoundError } from '../../domain/errors';
 
 export class TeamLookupAdapter implements TeamLookupPort {
   constructor(

@@ -1,5 +1,5 @@
-import { Task } from "src/modules/tasks/domain/tasks.entity";
-import { Assignee } from "src/modules/tasks/domain/assignee.vo";
+import { Task } from 'src/modules/tasks/domain/tasks.entity';
+import { Assignee } from 'src/modules/tasks/domain/assignee.vo';
 
 export class TaskResponseDto {
   id: string;

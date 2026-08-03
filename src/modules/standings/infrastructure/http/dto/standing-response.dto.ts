@@ -1,4 +1,4 @@
-import { Standing } from "src/modules/standings/domain/standing.entity";
+import { Standing } from 'src/modules/standings/domain/standing.entity';
 
 export class StandingResponseDto {
   id: string;

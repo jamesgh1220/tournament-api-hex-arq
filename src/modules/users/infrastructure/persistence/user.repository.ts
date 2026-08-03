@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../../domain/user.entity';
 import { UserOrmEntity } from './user.orm';
-import { UserRepositoryPort } from "../../domain/user.repository.port";
+import { UserRepositoryPort } from '../../domain/user.repository.port';
 
 @Injectable()
 export class UserRepository implements UserRepositoryPort {

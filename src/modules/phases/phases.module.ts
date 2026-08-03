@@ -17,9 +17,7 @@ import { PhaseRepositoryPort } from './domain/phase.repository.port';
 import { PhaseController } from './infrastructure/http/phase.controller';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([PhaseOrmEntity]),
-  ],
+  imports: [TypeOrmModule.forFeature([PhaseOrmEntity])],
   providers: [
     {
       provide: PHASE_REPOSITORY,

@@ -26,7 +26,7 @@ export class Team {
   get name(): string {
     return this._name;
   }
-  
+
   get createdAt(): Date | undefined {
     return this._createdAt;
   }

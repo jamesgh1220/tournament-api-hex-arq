@@ -1,4 +1,4 @@
-import { Match } from "src/modules/matches/domain/match.entity";
+import { Match } from 'src/modules/matches/domain/match.entity';
 
 export class MatchResponseDto {
   id: string;

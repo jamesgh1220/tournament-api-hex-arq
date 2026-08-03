@@ -1,4 +1,4 @@
-import { Group } from "./group.entity";
+import { Group } from './group.entity';
 
 export interface GroupRepositoryPort {
   create(group: Group): Promise<Group>;

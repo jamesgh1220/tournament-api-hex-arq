@@ -14,7 +14,7 @@ export class PhaseTypeRepository implements PhaseTypeRepositoryPort {
 
   async findById(id: string): Promise<PhaseType | null> {
     const orm = await this.phaseTypeRepository.findOne({
-      where: { id }
+      where: { id },
     });
 
     return orm ? this.toDomain(orm) : null;
@@ -22,7 +22,7 @@ export class PhaseTypeRepository implements PhaseTypeRepositoryPort {
 
   async findByName(name: string): Promise<PhaseType | null> {
     const orm = await this.phaseTypeRepository.findOne({
-      where: { name }
+      where: { name },
     });
 
     return orm ? this.toDomain(orm) : null;
@@ -59,5 +59,4 @@ export class PhaseTypeRepository implements PhaseTypeRepositoryPort {
 
     return orm;
   }
-
 }

@@ -1,11 +1,9 @@
-import { randomUUID } from "crypto";
-import { Standing } from "../domain/standing.entity";
-import { StandingRepositoryPort } from "../domain/standing.repository.port";
+import { randomUUID } from 'crypto';
+import { Standing } from '../domain/standing.entity';
+import { StandingRepositoryPort } from '../domain/standing.repository.port';
 
 export class CreateStandingUseCase {
-  constructor(
-    private readonly standingRepository: StandingRepositoryPort,
-  ) {}
+  constructor(private readonly standingRepository: StandingRepositoryPort) {}
 
   async execute(
     played: number,

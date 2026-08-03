@@ -25,6 +25,12 @@ export class StandingRepository implements StandingRepositoryPort {
     return this.toDomain(saved);
   }
 
+  async createMany(matches: Standing[]): Promise<Standing[]> {
+    const orm = matches.map(this.toOrm);
+    const saved = await this.repo().save(orm); // save acepta array
+    return saved.map(this.toDomain);
+  }
+
   async update(standing: Standing): Promise<Standing> {
     throw new Error('Method not implemented.');
   }
@@ -33,18 +39,21 @@ export class StandingRepository implements StandingRepositoryPort {
     const orm = await this.standingRepository.findOne({
       where: {
         tournamentId,
-      }
+      },
     });
 
     return orm ? this.toDomain(orm) : null;
   }
 
-  async findByTournamentAndTeam(tournamentId: string, teamId: string): Promise<Standing | null> {
+  async findByTournamentAndTeam(
+    tournamentId: string,
+    teamId: string,
+  ): Promise<Standing | null> {
     const orm = await this.standingRepository.findOne({
       where: {
         tournamentId,
         teamId,
-      }
+      },
     });
 
     return orm ? this.toDomain(orm) : null;

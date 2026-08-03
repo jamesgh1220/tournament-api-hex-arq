@@ -1,6 +1,6 @@
-import { TournamentRepositoryPort } from "../domain/tournament.repository.port";
-import { Tournament } from "../domain/tournament.entity";
-import { TournamentNotFoundError } from "../domain/errors";
+import { TournamentRepositoryPort } from '../domain/tournament.repository.port';
+import { Tournament } from '../domain/tournament.entity';
+import { TournamentNotFoundError } from '../domain/errors';
 
 export class GetTournamentUseCase {
   constructor(

@@ -40,8 +40,21 @@ export class MatchRepository implements MatchRepositoryPort {
     return saved.map(this.toDomain);
   }
 
-  async update(match: Match): Promise<Match> {
-    throw new Error('Method not implemented.');
+  async update(match: Match): Promise<Match | null> {
+    const orm = await this.repo().findOneBy({ id: match.id });
+    if (!orm) return null;
+
+    orm.phaseId = match.phaseId;
+    orm.groupId = match.groupId ?? undefined;
+    orm.homeTeamId = match.homeTeamId;
+    orm.awayTeamId = match.awayTeamId;
+    orm.homeScore = match.homeScore;
+    orm.awayScore = match.awayScore;
+    orm.status = match.status;
+    orm.scheduledAt = match.scheduledAt;
+
+    const saved = await this.repo().save(orm);
+    return this.toDomain(saved);
   }
 
   async delete(id: string): Promise<void> {

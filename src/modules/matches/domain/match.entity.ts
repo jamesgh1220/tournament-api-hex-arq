@@ -1,3 +1,14 @@
+export interface MatchUpdateData {
+  phaseId?: string;
+  homeTeamId?: string;
+  awayTeamId?: string;
+  homeScore?: number;
+  awayScore?: number;
+  status?: string;
+  scheduledAt?: Date;
+  groupId?: string | null;
+}
+
 export class Match {
   constructor(
     private readonly _id: string,
@@ -29,7 +40,9 @@ export class Match {
       throw new Error('El estado del partido no es válido');
     }
     if (scheduledAt < new Date()) {
-      throw new Error('La fecha de inicio del partido no puede ser en el pasado');
+      throw new Error(
+        'La fecha de inicio del partido no puede ser en el pasado',
+      );
     }
 
     return new Match(
@@ -103,5 +116,36 @@ export class Match {
 
   get scheduledAt(): Date {
     return this._scheduledAt;
+  }
+
+  copyWith(data: MatchUpdateData): Match {
+    const homeScore = data.homeScore ?? this._homeScore;
+    const awayScore = data.awayScore ?? this._awayScore;
+    const status = data.status ?? this._status;
+    const scheduledAt = data.scheduledAt ?? this._scheduledAt;
+
+    if (homeScore < 0 || awayScore < 0) {
+      throw new Error('Los goles no pueden ser negativos');
+    }
+    if (status !== 'TO_COME' && status !== 'FINISHED') {
+      throw new Error('El estado del partido no es válido');
+    }
+    if (data.scheduledAt !== undefined && data.scheduledAt < new Date()) {
+      throw new Error(
+        'La fecha de inicio del partido no puede ser en el pasado',
+      );
+    }
+
+    return new Match(
+      this._id,
+      data.phaseId ?? this._phaseId,
+      data.homeTeamId ?? this._homeTeamId,
+      data.awayTeamId ?? this._awayTeamId,
+      homeScore,
+      awayScore,
+      status,
+      scheduledAt,
+      data.groupId !== undefined ? data.groupId : this._groupId,
+    );
   }
 }

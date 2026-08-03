@@ -1,4 +1,4 @@
-import { Team } from "src/modules/teams/domain/team.entity";
+import { Team } from 'src/modules/teams/domain/team.entity';
 
 export class TeamResponseDto {
   id: string;

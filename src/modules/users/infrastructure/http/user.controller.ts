@@ -8,21 +8,21 @@ import {
   NotFoundException,
   HttpCode,
   HttpStatus,
-} from "@nestjs/common";
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { UserResponseDto } from './dto/user-response.dto';
-import { CreateUserUseCase } from "../../application/create-user.use-case";
-import { GetUserUseCase } from "../../application/get-user.use-case";
-import { GetAllUsersUseCase } from "../../application/get-all-users.use-case";
-import { LoginUserUseCase } from "../../application/login-user.use-case";
+import { CreateUserUseCase } from '../../application/create-user.use-case';
+import { GetUserUseCase } from '../../application/get-user.use-case';
+import { GetAllUsersUseCase } from '../../application/get-all-users.use-case';
+import { LoginUserUseCase } from '../../application/login-user.use-case';
 import {
   CREATE_USER_USE_CASE,
   GET_USER_USE_CASE,
   GET_ALL_USERS_USE_CASE,
   LOGIN_USER_USE_CASE,
-} from "../../user.tokens";
-import { UserNotFoundError } from "../../domain/errors";
+} from '../../user.tokens';
+import { UserNotFoundError } from '../../domain/errors';
 
 @Controller('users')
 export class UserController {
@@ -39,7 +39,12 @@ export class UserController {
 
   @Post()
   async create(@Body() dto: CreateUserDto): Promise<UserResponseDto> {
-    const user = await this.createUserUseCase.execute(dto.name, dto.email, dto.password, dto.role);
+    const user = await this.createUserUseCase.execute(
+      dto.name,
+      dto.email,
+      dto.password,
+      dto.role,
+    );
     return UserResponseDto.fromDomain(user);
   }
 

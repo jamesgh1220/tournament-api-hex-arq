@@ -15,7 +15,10 @@ export class LoginUserUseCase {
       throw new Error('Credenciales inválidas');
     }
 
-    const isValidPassword = await this.loginAdapter.comparePassword(dto.password, user.password);
+    const isValidPassword = await this.loginAdapter.comparePassword(
+      dto.password,
+      user.password,
+    );
     if (!isValidPassword) {
       throw new Error('Credenciales inválidas');
     }

@@ -11,8 +11,8 @@ import {
   Controller,
   NotFoundException,
   BadRequestException,
-} from "@nestjs/common";
-import { TournamentDto } from "./dto/tournament.dto";
+} from '@nestjs/common';
+import { TournamentDto } from './dto/tournament.dto';
 import {
   CREATE_TOURNAMENT_USE_CASE,
   GET_TOURNAMENT_USE_CASE,
@@ -21,16 +21,16 @@ import {
   ADD_TEAM_TO_TOURNAMENT_USE_CASE,
   REMOVE_TEAM_FROM_TOURNAMENT_USE_CASE,
   GENERATE_FIXTURE_TOURNAMENT_USE_CASE,
-} from "../../tournament.tokens";
-import { JwtAuthGuard } from "src/common/guards/jwt-auth-guard";
-import { CreateTournamentUseCase } from "../../application/create-tournament.use-case";
-import { GetAllTournamentsUseCase } from "../../application/get-all-tournaments.use-case";
-import { GetTournamentUseCase } from "../../application/get-tournament.use-case";
-import { DeleteTournamentUseCase } from "../../application/delete-tournament.use-case";
-import { AddTeamToTournamentUseCase } from "../../application/add-team-to-tournament.use-case";
-import { RemoveTeamFromTournamentUseCase } from "../../application/remove-team-from-tournament.use-case";
-import { TournamentResponseDto } from "./dto/tournament-response.dto";
-import { GenerateFixtureUseCase } from "../../application/generate-fixture.use-case";
+} from '../../tournament.tokens';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth-guard';
+import { CreateTournamentUseCase } from '../../application/create-tournament.use-case';
+import { GetAllTournamentsUseCase } from '../../application/get-all-tournaments.use-case';
+import { GetTournamentUseCase } from '../../application/get-tournament.use-case';
+import { DeleteTournamentUseCase } from '../../application/delete-tournament.use-case';
+import { AddTeamToTournamentUseCase } from '../../application/add-team-to-tournament.use-case';
+import { RemoveTeamFromTournamentUseCase } from '../../application/remove-team-from-tournament.use-case';
+import { TournamentResponseDto } from './dto/tournament-response.dto';
+import { GenerateFixtureUseCase } from '../../application/generate-fixture.use-case';
 import {
   TournamentNotFoundError,
   TeamNotFoundError,
@@ -40,7 +40,7 @@ import {
   PhaseActiveByTournamentNotFoundError,
   InsufficientTeamsForFixtureError,
   PhaseHasAssignedFixtureError,
-} from "../../domain/errors";
+} from '../../domain/errors';
 
 //TODO: llevar a types generales de dominio
 export type GeneratedMatchSummary = {
@@ -74,7 +74,12 @@ export class TournamentController {
 
   @Post()
   async create(@Body() dto: TournamentDto): Promise<TournamentResponseDto> {
-    const tournament = await this.createTournamentUseCase.execute(dto.name, dto.state, dto.configuration, dto.startDate);
+    const tournament = await this.createTournamentUseCase.execute(
+      dto.name,
+      dto.state,
+      dto.configuration,
+      dto.startDate,
+    );
     return TournamentResponseDto.fromDomain(tournament);
   }
 
@@ -116,7 +121,10 @@ export class TournamentController {
     @Param('teamId') teamId: string,
   ): Promise<TournamentResponseDto> {
     try {
-      const tournament = await this.addTeamToTournamentUseCase.execute(id, teamId);
+      const tournament = await this.addTeamToTournamentUseCase.execute(
+        id,
+        teamId,
+      );
       return TournamentResponseDto.fromDomain(tournament);
     } catch (error) {
       if (error instanceof TournamentNotFoundError) {
@@ -156,7 +164,9 @@ export class TournamentController {
 
   @Post(':id/generate-fixture')
   //TODO: tipar respuesta
-  async generateFixture(@Param('id') id: string): Promise<GeneratedMatchSummary[]> {
+  async generateFixture(
+    @Param('id') id: string,
+  ): Promise<GeneratedMatchSummary[]> {
     try {
       return await this.generateFixtureUseCase.execute(id);
     } catch (error) {

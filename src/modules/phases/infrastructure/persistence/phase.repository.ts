@@ -22,20 +22,23 @@ export class PhaseRepository implements PhaseRepositoryPort {
   }
 
   async create(phase: Phase): Promise<Phase> {
-    const saved = await this.repo().save(this.toOrm(phase))
+    const saved = await this.repo().save(this.toOrm(phase));
     return this.toDomain(saved);
   }
 
-  async getByStatus(tournamentId: string, status: string): Promise<Phase | null> {
+  async getByStatus(
+    tournamentId: string,
+    status: string,
+  ): Promise<Phase | null> {
     const orm = await this.phaseRepository.findOne({
-      where: { status, tournamentId }
+      where: { status, tournamentId },
     });
     return orm ? this.toDomain(orm) : null;
   }
 
   async getByTournament(tournamentId: string): Promise<Phase | null> {
     const orm = await this.phaseRepository.findOne({
-      where: { tournamentId }
+      where: { tournamentId },
     });
     return orm ? this.toDomain(orm) : null;
   }
@@ -48,12 +51,14 @@ export class PhaseRepository implements PhaseRepositoryPort {
     // return orm ? this.toDomain(orm) : null;
   }
 
-  async hasAssignedFixturehasAssignedFixture(id: string): Promise<Phase | null> {
+  async hasAssignedFixturehasAssignedFixture(
+    id: string,
+  ): Promise<Phase | null> {
     const orm = await this.phaseRepository.findOne({
       where: { id },
       relations: { matches: true },
     });
-    
+
     return orm ? this.toDomain(orm) : null;
   }
 

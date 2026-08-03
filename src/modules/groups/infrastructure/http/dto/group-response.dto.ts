@@ -1,4 +1,4 @@
-import { Group } from "src/modules/groups/domain/group.entity";
+import { Group } from 'src/modules/groups/domain/group.entity';
 
 export class GroupResponseDto {
   id: string;

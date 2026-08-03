@@ -1,5 +1,5 @@
-import { MatchRepositoryPort } from "../domain/match.repository.port";
-import { FixtureGenerator } from "../domain/services/fixture-generator";
+import { MatchRepositoryPort } from '../domain/match.repository.port';
+import { FixtureGenerator } from '../domain/services/fixture-generator';
 
 //TODO: llevar a types generales de dominio
 export type GeneratedMatchSummary = {

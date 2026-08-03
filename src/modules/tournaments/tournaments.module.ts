@@ -23,6 +23,7 @@ import {
   PHASE_LOOKUP,
   PHASE_TYPE_PORT,
   FIXTURE_GENERATE_PORT,
+  STANDING_SETUP_PORT,
 } from './tournament.tokens';
 import { UNIT_OF_WORK } from 'src/shared/shared.tokens';
 import { TournamentRepositoryPort } from './domain/tournament.repository.port';
@@ -42,6 +43,8 @@ import { FixtureGenerationPort } from './domain/ports/fixture-generation.port';
 import { FixtureGenerationAdapter } from './infrastructure/adapters/fixture-generation.adapter';
 import { MatchesModule } from '../matches/matches.module';
 import { UnitOfWorkPort } from 'src/shared/application/ports/unit-of-work.port';
+import { StandingSetupPort } from './domain/ports/standing-setup.port';
+import { StandingSetupAdapter } from './infrastructure/adapters/standing-setup.adapter';
 
 @Module({
   imports: [
@@ -55,6 +58,10 @@ import { UnitOfWorkPort } from 'src/shared/application/ports/unit-of-work.port';
     {
       provide: TOURNAMENT_REPOSITORY,
       useClass: TournamentRepository,
+    },
+    {
+      provide: STANDING_SETUP_PORT,
+      useClass: StandingSetupAdapter,
     },
     {
       provide: TEAM_LOOKUP,
@@ -120,19 +127,24 @@ import { UnitOfWorkPort } from 'src/shared/application/ports/unit-of-work.port';
       useFactory: (
         tournamentRepository: TournamentRepositoryPort,
         teamLookup: TeamLookupPort,
-      ) =>
-        new AddTeamToTournamentUseCase(tournamentRepository, teamLookup),
+      ) => new AddTeamToTournamentUseCase(tournamentRepository, teamLookup),
       inject: [TOURNAMENT_REPOSITORY, TEAM_LOOKUP],
     },
     {
       provide: REMOVE_TEAM_FROM_TOURNAMENT_USE_CASE,
-      useFactory: (tournamentRepository: TournamentRepositoryPort, teamLookup: TeamLookupPort) =>
+      useFactory: (
+        tournamentRepository: TournamentRepositoryPort,
+        teamLookup: TeamLookupPort,
+      ) =>
         new RemoveTeamFromTournamentUseCase(tournamentRepository, teamLookup),
       inject: [TOURNAMENT_REPOSITORY, TEAM_LOOKUP],
     },
     {
       provide: REMOVE_TEAM_FROM_TOURNAMENT_USE_CASE,
-      useFactory: (tournamentRepository: TournamentRepositoryPort, teamLookup: TeamLookupPort) =>
+      useFactory: (
+        tournamentRepository: TournamentRepositoryPort,
+        teamLookup: TeamLookupPort,
+      ) =>
         new RemoveTeamFromTournamentUseCase(tournamentRepository, teamLookup),
       inject: [TOURNAMENT_REPOSITORY, TEAM_LOOKUP],
     },
@@ -143,18 +155,21 @@ import { UnitOfWorkPort } from 'src/shared/application/ports/unit-of-work.port';
         phaseLookup: PhaseLookupPort,
         fixtureGeneration: FixtureGenerationPort,
         unitOfWork: UnitOfWorkPort,
+        standingSetup: StandingSetupPort,
       ) =>
         new GenerateFixtureUseCase(
           tournamentRepository,
           phaseLookup,
           fixtureGeneration,
           unitOfWork,
+          standingSetup,
         ),
       inject: [
         TOURNAMENT_REPOSITORY,
         PHASE_LOOKUP,
         FIXTURE_GENERATE_PORT,
         UNIT_OF_WORK,
+        STANDING_SETUP_PORT,
       ],
     },
   ],

@@ -15,9 +15,7 @@ import { StandingRepository } from './infrastructure/persistence/standing.reposi
 import { StandingController } from './infrastructure/http/standing.controller';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([StandingOrmEntity]),
-  ],
+  imports: [TypeOrmModule.forFeature([StandingOrmEntity])],
   providers: [
     {
       provide: STANDING_REPOSITORY,
@@ -40,8 +38,9 @@ import { StandingController } from './infrastructure/http/standing.controller';
       useFactory: (standingRepository: StandingRepositoryPort) =>
         new GetStandingByTournamentAndTeamUseCase(standingRepository),
       inject: [STANDING_REPOSITORY],
-    }
+    },
   ],
+  exports: [CREATE_STANDING_USE_CASE],
   controllers: [StandingController],
 })
 export class StandingsModule {}

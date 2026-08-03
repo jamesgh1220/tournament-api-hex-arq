@@ -1,5 +1,5 @@
-import { GroupRepositoryPort } from "../domain/group.repository.port";
-import { GroupNotFoundError } from "../domain/errors";
+import { GroupRepositoryPort } from '../domain/group.repository.port';
+import { GroupNotFoundError } from '../domain/errors';
 
 export class DeleteGroupUseCase {
   constructor(private readonly groupRepository: GroupRepositoryPort) {}

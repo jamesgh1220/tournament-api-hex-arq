@@ -1,10 +1,10 @@
-import { TournamentRepositoryPort } from "../domain/tournament.repository.port";
-import { Tournament } from "../domain/tournament.entity";
-import { randomUUID } from "crypto";
-import { PhaseSetupPort } from "../domain/ports/phase-setup.port";
-import { PhaseTypePort } from "../domain/ports/phase-type.port";
-import { LifecycleStatus } from "src/shared/domain/enums/lifecycle-status.enum";
-import { DEFAULT_LEAGUE_PHASE_NAME } from "../domain/constants/default-phase-names";
+import { TournamentRepositoryPort } from '../domain/tournament.repository.port';
+import { Tournament } from '../domain/tournament.entity';
+import { randomUUID } from 'crypto';
+import { PhaseSetupPort } from '../domain/ports/phase-setup.port';
+import { PhaseTypePort } from '../domain/ports/phase-type.port';
+import { LifecycleStatus } from 'src/shared/domain/enums/lifecycle-status.enum';
+import { DEFAULT_LEAGUE_PHASE_NAME } from '../domain/constants/default-phase-names';
 import { UnitOfWorkPort } from 'src/shared/application/ports/unit-of-work.port';
 
 export class CreateTournamentUseCase {
@@ -23,7 +23,13 @@ export class CreateTournamentUseCase {
   ): Promise<Tournament> {
     // Begin transaction
     return this.unitOfWork.execute(async () => {
-      const tournament = Tournament.create(randomUUID(), name, state, configuration, startDate);
+      const tournament = Tournament.create(
+        randomUUID(),
+        name,
+        state,
+        configuration,
+        startDate,
+      );
       // Creacion del torneo
       const saved = await this.tournamentRepository.create(tournament);
 
@@ -39,9 +45,9 @@ export class CreateTournamentUseCase {
             saved.id,
             phaseType.id,
           );
-        }      
+        }
       }
-  
+
       return saved;
     });
   }
