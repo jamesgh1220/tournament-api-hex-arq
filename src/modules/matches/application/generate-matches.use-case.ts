@@ -1,15 +1,6 @@
 import { MatchRepositoryPort } from '../domain/match.repository.port';
+import { Match } from '../domain/match.entity';
 import { FixtureGenerator } from '../domain/services/fixture-generator';
-
-//TODO: llevar a types generales de dominio
-export type GeneratedMatchSummary = {
-  id: string;
-  phaseId: string;
-  homeTeamId: string;
-  awayTeamId: string;
-  scheduledAt: Date;
-  groupId: string | null;
-};
 
 export class GenerateMatchesUseCase {
   constructor(
@@ -22,7 +13,7 @@ export class GenerateMatchesUseCase {
     teamIds: string[];
     fixtureStartDate: Date;
     doubleRound?: boolean;
-  }): Promise<GeneratedMatchSummary[]> {
+  }): Promise<Match[]> {
     const matches = this.fixtureGenerator.generate(input);
     await this.matchRepository.createMany(matches);
     return matches;

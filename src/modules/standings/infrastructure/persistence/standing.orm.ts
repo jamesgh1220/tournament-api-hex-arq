@@ -1,4 +1,11 @@
-import { Entity, PrimaryColumn, ManyToOne, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryColumn,
+  ManyToOne,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { PhaseOrmEntity } from 'src/modules/phases/infrastructure/persistence/phase.orm';
 import { TournamentOrmEntity } from 'src/modules/tournaments/infrastructure/persistence/tournament.orm';
 import { TeamOrmEntity } from 'src/modules/teams/infrastructure/persistence/team.orm';
@@ -51,4 +58,10 @@ export class StandingOrmEntity {
 
   @Column()
   points: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

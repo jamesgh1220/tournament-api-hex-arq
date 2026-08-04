@@ -7,7 +7,7 @@ interface InitialStanding {
   groupId?: string;
 }
 
-// TODO: creaer type de respuesta
+// TODO: crear type de respuesta
 export interface StandingSetupPort {
   initialize(standings: InitialStanding[]);
 }

@@ -1,8 +1,7 @@
-import { Inject } from "@nestjs/common";
-import { CREATE_MATCH_USE_CASE } from "src/modules/matches/match.tokens";
-import { StandingSetupPort } from "../../domain/ports/standing-setup.port";
-import { CreateStandingUseCase } from "src/modules/standings/application/create-standing.use-case";
-
+import { Inject } from '@nestjs/common';
+import { StandingSetupPort } from '../../domain/ports/standing-setup.port';
+import { CreateStandingUseCase } from 'src/modules/standings/application/create-standing.use-case';
+import { CREATE_STANDING_USE_CASE } from 'src/modules/standings/standing.tokens';
 
 // TODO:
 interface InitialStanding {
@@ -14,27 +13,15 @@ interface InitialStanding {
 
 export class StandingSetupAdapter implements StandingSetupPort {
   constructor(
-    @Inject(CREATE_MATCH_USE_CASE)
+    @Inject(CREATE_STANDING_USE_CASE)
     private readonly createStandingUseCase: CreateStandingUseCase,
   ) {}
 
   async initialize(standings: InitialStanding[]) {
-    const initialStanding = await this.createStandingUseCase.execute(
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      tournamentId,
-      teamId,
-      phaseId,
-      groupId,
-    );
+    const initialStanding = await this.createStandingUseCase.execute(standings);
     if (!initialStanding)
       throw new Error(`
-        Error creando la tabla de posiciones inicial para el torneo ${tournamentId}.
+        Error creando la tabla de posiciones inicial para el torneo.
       `);
 
     return initialStanding;

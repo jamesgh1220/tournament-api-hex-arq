@@ -30,6 +30,7 @@ import { DeleteTournamentUseCase } from '../../application/delete-tournament.use
 import { AddTeamToTournamentUseCase } from '../../application/add-team-to-tournament.use-case';
 import { RemoveTeamFromTournamentUseCase } from '../../application/remove-team-from-tournament.use-case';
 import { TournamentResponseDto } from './dto/tournament-response.dto';
+import { GeneratedMatchSummaryDto } from './dto/generated-match-summary.dto';
 import { GenerateFixtureUseCase } from '../../application/generate-fixture.use-case';
 import {
   TournamentNotFoundError,
@@ -41,16 +42,6 @@ import {
   InsufficientTeamsForFixtureError,
   PhaseHasAssignedFixtureError,
 } from '../../domain/errors';
-
-//TODO: llevar a types generales de dominio
-export type GeneratedMatchSummary = {
-  id: string;
-  phaseId: string;
-  homeTeamId: string;
-  awayTeamId: string;
-  scheduledAt: Date;
-  groupId: string | null;
-};
 
 @UseGuards(JwtAuthGuard)
 @Controller('tournaments')
@@ -163,12 +154,12 @@ export class TournamentController {
   }
 
   @Post(':id/generate-fixture')
-  //TODO: tipar respuesta
   async generateFixture(
     @Param('id') id: string,
-  ): Promise<GeneratedMatchSummary[]> {
+  ): Promise<GeneratedMatchSummaryDto[]> {
     try {
-      return await this.generateFixtureUseCase.execute(id);
+      const summaries = await this.generateFixtureUseCase.execute(id);
+      return summaries.map((s) => GeneratedMatchSummaryDto.fromSummary(s));
     } catch (error) {
       if (error instanceof TournamentNotFoundError) {
         throw new NotFoundException(error.message);

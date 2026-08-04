@@ -10,7 +10,7 @@ export class Standing {
     private readonly _points: number,
     private readonly _tournamentId: string,
     private readonly _teamId: string,
-    private readonly _phaseId?: string,
+    private readonly _phaseId: string,
     private readonly _groupId?: string | null,
   ) {}
 
@@ -25,8 +25,8 @@ export class Standing {
     points: number,
     tournamentId: string,
     teamId: string,
-    phaseId?: string,
-    groupId?: string,
+    phaseId: string,
+    groupId?: string | null,
   ): Standing {
     if (played < 0) {
       throw new Error('Los partidos jugados deben ser mayor o igual a cero.');
@@ -93,7 +93,7 @@ export class Standing {
     points: number;
     tournamentId: string;
     teamId: string;
-    phaseId?: string;
+    phaseId: string;
     groupId?: string | null;
   }) {
     return new Standing(
@@ -150,6 +150,10 @@ export class Standing {
 
   get groupId(): string | null {
     return this._groupId ?? null;
+  }
+
+  get phaseId(): string {
+    return this._phaseId;
   }
 
   get teamId(): string {

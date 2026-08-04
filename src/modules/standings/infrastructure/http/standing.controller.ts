@@ -37,24 +37,24 @@ export class StandingController {
     private readonly getStandingByTournamentAndTeamUseCase: GetStandingByTournamentAndTeamUseCase,
   ) {}
 
-  @Post()
-  async create(@Body() dto: StandingDto): Promise<StandingResponseDto> {
-    const standing = await this.createStandingUseCase.execute(
-      dto.played,
-      dto.wins,
-      dto.draws,
-      dto.losses,
-      dto.goalsFor,
-      dto.goalsAgainst,
-      dto.points,
-      dto.tournamentId,
-      dto.teamId,
-      dto.phaseId,
-      dto.groupId,
-    );
+  // @Post()
+  // async create(@Body() dto: StandingDto): Promise<StandingResponseDto> {
+  //   const standing = await this.createStandingUseCase.execute(
+  //     dto.played,
+  //     dto.wins,
+  //     dto.draws,
+  //     dto.losses,
+  //     dto.goalsFor,
+  //     dto.goalsAgainst,
+  //     dto.points,
+  //     dto.tournamentId,
+  //     dto.teamId,
+  //     dto.phaseId,
+  //     dto.groupId,
+  //   );
 
-    return StandingResponseDto.fromDomain(standing);
-  }
+  //   return StandingResponseDto.fromDomain(standing);
+  // }
 
   @Get('tournament/:tournamentId')
   async getByTournament(

@@ -1,4 +1,3 @@
-//TODO: llevar a types generales de dominio
 export type GenerateFixtureCommand = {
   phaseId: string;
   teamIds: string[];
@@ -6,7 +5,6 @@ export type GenerateFixtureCommand = {
   doubleRound?: boolean;
 };
 
-//TODO: llevar a types generales de dominio
 export type GeneratedMatchSummary = {
   id: string;
   phaseId: string;

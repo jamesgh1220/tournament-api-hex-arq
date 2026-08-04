@@ -45,6 +45,7 @@ import { MatchesModule } from '../matches/matches.module';
 import { UnitOfWorkPort } from 'src/shared/application/ports/unit-of-work.port';
 import { StandingSetupPort } from './domain/ports/standing-setup.port';
 import { StandingSetupAdapter } from './infrastructure/adapters/standing-setup.adapter';
+import { StandingsModule } from '../standings/standings.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { StandingSetupAdapter } from './infrastructure/adapters/standing-setup.a
     PhasesModule,
     PhasesTypesModule,
     MatchesModule,
+    StandingsModule,
   ],
   providers: [
     {

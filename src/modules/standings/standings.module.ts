@@ -13,19 +13,23 @@ import {
 import { StandingRepositoryPort } from './domain/standing.repository.port';
 import { StandingRepository } from './infrastructure/persistence/standing.repository';
 import { StandingController } from './infrastructure/http/standing.controller';
+import { StandingGenerator } from './domain/service/standing-generator';
 
 @Module({
   imports: [TypeOrmModule.forFeature([StandingOrmEntity])],
   providers: [
+    StandingGenerator,
     {
       provide: STANDING_REPOSITORY,
       useClass: StandingRepository,
     },
     {
       provide: CREATE_STANDING_USE_CASE,
-      useFactory: (standingRepository: StandingRepositoryPort) =>
-        new CreateStandingUseCase(standingRepository),
-      inject: [STANDING_REPOSITORY],
+      useFactory: (
+        standingRepository: StandingRepositoryPort,
+        standingGenerator: StandingGenerator,
+      ) => new CreateStandingUseCase(standingRepository, standingGenerator),
+      inject: [STANDING_REPOSITORY, StandingGenerator],
     },
     {
       provide: GET_STANDING_BY_TOURNAMENT_USE_CASE,

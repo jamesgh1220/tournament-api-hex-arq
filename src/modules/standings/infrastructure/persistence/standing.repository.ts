@@ -67,11 +67,11 @@ export class StandingRepository implements StandingRepositoryPort {
       draws: orm.draws,
       losses: orm.losses,
       goalsFor: orm.goalsFor,
-      goalsAgainst: orm.goalsFor,
+      goalsAgainst: orm.goalsAgainst,
       points: orm.points,
       tournamentId: orm?.tournamentId,
       teamId: orm.teamId,
-      // phaseId: orm?.phaseId,
+      phaseId: orm.phaseId,
       groupId: orm?.groupId,
     });
   }
@@ -88,7 +88,7 @@ export class StandingRepository implements StandingRepositoryPort {
     orm.points = standing.points;
     orm.tournamentId = standing.tournamentId;
     orm.teamId = standing.teamId;
-    // orm.phaseId = standing.phaseId;
+    orm.phaseId = standing.phaseId;
     orm.groupId = standing.groupId;
 
     return orm;

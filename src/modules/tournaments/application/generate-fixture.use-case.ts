@@ -5,19 +5,10 @@ import {
 } from '../domain/errors';
 import { TournamentRepositoryPort } from '../domain/tournament.repository.port';
 import { FixtureGenerationPort } from '../domain/ports/fixture-generation.port';
+import { GeneratedMatchSummary } from '../domain/ports/fixture-generation.port';
 import { PhaseLookupPort } from '../domain/ports/phase-lookup.port';
 import { UnitOfWorkPort } from 'src/shared/application/ports/unit-of-work.port';
 import { StandingSetupPort } from '../domain/ports/standing-setup.port';
-
-//TODO: llevar a types generales de dominio
-export type GeneratedMatchSummary = {
-  id: string;
-  phaseId: string;
-  homeTeamId: string;
-  awayTeamId: string;
-  scheduledAt: Date;
-  groupId: string | null;
-};
 
 export class GenerateFixtureUseCase {
   constructor(
@@ -74,10 +65,9 @@ export class GenerateFixtureUseCase {
         teamId: team.id,
         // No se envia groupId por ahora hasta que se hagan los otros tipos de torneos
       }));
-      // await this.standingSetup.initialize(
-      //   tournamentId,
 
-      // );
+      // TODO: validar que ese torneo no tenga la tabla ya creada
+      await this.standingSetup.initialize(standings);
 
       return matches;
     });
