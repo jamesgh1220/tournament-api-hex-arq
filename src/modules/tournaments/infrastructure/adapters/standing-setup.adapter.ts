@@ -2,6 +2,7 @@ import { Inject } from '@nestjs/common';
 import {
   InitialStandingInput,
   StandingSetupPort,
+  StandingStatsInput,
 } from '../../domain/ports/standing-setup.port';
 import { CreateStandingUseCase } from 'src/modules/standings/application/create-standing.use-case';
 import { GetStandingByPhaseTournamentUseCase } from 'src/modules/standings/application/get-standing-by-phase-tournament.use-case';
@@ -11,16 +12,6 @@ import {
   GET_STANDING_BY_PHASE_TOURNAMENT_USE_CASE,
   UPDATE_STANDING_AFTER_MATCH_USE_CASE,
 } from 'src/modules/standings/standing.tokens';
-
-// TODO: generalizar
-interface StandingStats {
-  wins: number,
-  draws: number,
-  losses: number,
-  goalsFor: number,
-  goalsAgainst: number,
-  points: number,
-}
 
 export class StandingSetupAdapter implements StandingSetupPort {
   constructor(
@@ -51,7 +42,17 @@ export class StandingSetupAdapter implements StandingSetupPort {
     return initialStanding;
   }
   // TODO: tipar respuesta
-  async update(tournamentId: string, phaseId: string, teamId: string, stats: StandingStats) {
-    return await this.updateStandingAfterMatchUseCase.execute(tournamentId, phaseId, teamId, stats);
+  async update(
+    tournamentId: string,
+    phaseId: string,
+    teamId: string,
+    stats: StandingStatsInput,
+  ) {
+    return await this.updateStandingAfterMatchUseCase.execute(
+      tournamentId,
+      phaseId,
+      teamId,
+      stats,
+    );
   }
 }

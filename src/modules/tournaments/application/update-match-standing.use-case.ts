@@ -8,6 +8,7 @@ import {
 import { UnitOfWorkPort } from 'src/shared/application/ports/unit-of-work.port';
 import { MatchResult } from '../domain/value-objects/match-result.vo';
 import { StandingSetupPort } from '../domain/ports/standing-setup.port';
+import { toStandingStats } from '../domain/services/match-result-to-standing-stats';
 
 export type UpdateMatchStandingInput = {
   homeScore: number;
@@ -41,9 +42,12 @@ export class UpdateMatchStandingUseCase {
     //Validar existencia partido
     const match = await this.matchLookup.matchExists(matchId);
     if (!match) throw new MatchNotFoundError(matchId);
-    
+
     // Validar que exista la tabla de posiciones para el torneo en la fase activa
-    const standing = await this.standingSetup.exists(tournamentId, match.phaseId);
+    const standing = await this.standingSetup.exists(
+      tournamentId,
+      match.phaseId,
+    );
     if (!standing) throw new StandingNotFoundError(tournamentId, match.phaseId);
 
     // Abrir transaction
@@ -52,30 +56,20 @@ export class UpdateMatchStandingUseCase {
       await this.matchLookup.update(matchId, result);
 
       // actualizar posiciones equipo local
-      const infoHomeTeamMatch = {
-        wins: (result.homeScore > result.awayScore) ? 1 : 0,
-        draws: (result.homeScore === result.awayScore) ? 1 : 0,
-        losses: (result.homeScore < result.awayScore) ? 1 : 0,
-        goalsFor: result.homeScore,
-        goalsAgainst: result.awayScore,
-        points: (result.homeScore > result.awayScore)
-          ? 3 : (result.homeScore === result.awayScore)
-            ? 1 : 0,
-      };
-      await this.standingSetup.update(tournamentId, match.phaseId, match.homeTeamId, infoHomeTeamMatch);
+      await this.standingSetup.update(
+        tournamentId,
+        match.phaseId,
+        match.homeTeamId,
+        toStandingStats(result, 'home'),
+      );
 
       // actualizar posiciones equipo visitante
-      const infoAwayTeamMatch = {
-        wins: (result.awayScore > result.homeScore) ? 1 : 0,
-        draws: (result.homeScore === result.awayScore) ? 1 : 0,
-        losses: (result.awayScore < result.homeScore) ? 1 : 0,
-        goalsFor: result.awayScore,
-        goalsAgainst: result.homeScore,
-        points: (result.awayScore > result.homeScore)
-          ? 3 : (result.homeScore === result.awayScore)
-            ? 1 : 0,
-      };
-      await this.standingSetup.update(tournamentId, match.phaseId, match.awayTeamId, infoAwayTeamMatch);
+      await this.standingSetup.update(
+        tournamentId,
+        match.phaseId,
+        match.awayTeamId,
+        toStandingStats(result, 'away'),
+      );
     });
   }
 }

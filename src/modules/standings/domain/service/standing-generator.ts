@@ -1,16 +1,7 @@
 import { randomUUID } from 'crypto';
 import { Standing } from '../standing.entity';
 import { InitialStanding } from '../types/initial-standing';
-
-// TODO: generalizar
-interface StandingStats {
-  wins: number,
-  draws: number,
-  losses: number,
-  goalsFor: number,
-  goalsAgainst: number,
-  points: number,
-}
+import { StandingStats } from '../types/standing-stats';
 
 export class StandingGenerator {
   initialStandingLeague(standings: InitialStanding[]): Standing[] {
@@ -46,6 +37,6 @@ export class StandingGenerator {
       _goalsFor: standing.goalsFor + stats.goalsFor,
       _goalsAgainst: standing.goalsAgainst + stats.goalsAgainst,
       _points: standing.points + stats.points,
-    }
+    };
   }
 }
