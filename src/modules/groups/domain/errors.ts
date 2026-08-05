@@ -1,27 +1,37 @@
-export class GroupNotFoundError extends Error {
+import { DomainError } from 'src/common/domain/domain-error';
+
+export class GroupNotFoundError extends DomainError {
+  readonly code = 'GROUP_NOT_FOUND';
+  readonly statusCode = 404;
+
   constructor(id: string) {
     super(`Grupo con id ${id} no encontrado.`);
-    this.name = 'GroupNotFoundError';
   }
 }
 
-export class GroupAlreadyExistsError extends Error {
+export class GroupAlreadyExistsError extends DomainError {
+  readonly code = 'GROUP_ALREADY_EXISTS';
+  readonly statusCode = 409;
+
   constructor(name: string) {
     super(`Grupo con nombre ${name} ya existe.`);
-    this.name = 'GroupAlreadyExistsError';
   }
 }
 
-export class GroupInvalidNameError extends Error {
+export class GroupInvalidNameError extends DomainError {
+  readonly code = 'GROUP_INVALID_NAME';
+  readonly statusCode = 400;
+
   constructor(name: string) {
     super(`El nombre ${name} del grupo es inválido.`);
-    this.name = 'GroupInvalidNameError';
   }
 }
 
-export class GroupByPhaseNotFoundError extends Error {
+export class GroupByPhaseNotFoundError extends DomainError {
+  readonly code = 'GROUP_BY_PHASE_NOT_FOUND';
+  readonly statusCode = 404;
+
   constructor(phaseId: string) {
     super(`El grupo con la fase ${phaseId} no existe.`);
-    this.name = 'GroupByPhaseNotFoundError';
   }
 }

@@ -9,7 +9,6 @@ import {
   UseGuards,
   HttpStatus,
   Controller,
-  NotFoundException,
 } from '@nestjs/common';
 import { GroupDto } from './dto/group.dto';
 import {
@@ -26,10 +25,6 @@ import { GetAllGroupsUseCase } from '../../application/get-all-groups.use-case';
 import { DeleteGroupUseCase } from '../../application/delete-group.use-case';
 import { GetGroupsByPhaseUseCase } from '../../application/get-groups-by-phase.use-case';
 import { GroupResponseDto } from './dto/group-response.dto';
-import {
-  GroupNotFoundError,
-  GroupByPhaseNotFoundError,
-} from '../../domain/errors';
 
 @UseGuards(JwtAuthGuard)
 @Controller('groups')
@@ -61,42 +56,21 @@ export class GroupController {
 
   @Get(':id')
   async findById(@Param('id') id: string): Promise<GroupResponseDto> {
-    try {
-      const group = await this.getGroupUseCase.execute(id);
-      return GroupResponseDto.fromDomain(group);
-    } catch (error) {
-      if (error instanceof GroupNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      throw error;
-    }
+    const group = await this.getGroupUseCase.execute(id);
+    return GroupResponseDto.fromDomain(group);
   }
 
   @Get('phase/:phaseId')
   async findByPhase(
     @Param('phaseId') phaseId: string,
   ): Promise<GroupResponseDto> {
-    try {
-      const group = await this.getGroupsByPhaseUseCase.execute(phaseId);
-      return GroupResponseDto.fromDomain(group);
-    } catch (error) {
-      if (error instanceof GroupByPhaseNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      throw error;
-    }
+    const group = await this.getGroupsByPhaseUseCase.execute(phaseId);
+    return GroupResponseDto.fromDomain(group);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id') id: string): Promise<void> {
-    try {
-      return await this.deleteGroupUseCase.execute(id);
-    } catch (error) {
-      if (error instanceof GroupNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      throw error;
-    }
+    return await this.deleteGroupUseCase.execute(id);
   }
 }

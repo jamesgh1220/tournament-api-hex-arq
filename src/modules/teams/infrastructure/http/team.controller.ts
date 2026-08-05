@@ -4,7 +4,6 @@ import {
   UseGuards,
   Inject,
   Param,
-  NotFoundException,
   Post,
   Body,
   Delete,
@@ -17,14 +16,12 @@ import {
   CREATE_TEAM_USE_CASE,
   GET_ALL_TEAMS_USE_CASE,
   GET_TEAM_USE_CASE,
-  UPDATE_TEAM_USE_CASE,
   DELETE_TEAM_USE_CASE,
 } from '../../teams.tokens';
 import { CreateTeamUseCase } from '../../application/create-team.use-case';
 import { GetTeamUseCase } from '../../application/get-team.use-case';
 import { DeleteTeamUseCase } from '../../application/delete-team.use-case';
 import { TeamResponseDto } from './dto/team-response.dto';
-import { TeamNotFoundError } from '../../domain/errors';
 import { TeamDto } from './dto/team.dto';
 
 @UseGuards(JwtAuthGuard)
@@ -49,15 +46,8 @@ export class TeamController {
 
   @Get(':id')
   async findById(@Param('id') id: string): Promise<TeamResponseDto> {
-    try {
-      const team = await this.getTeamUseCase.execute(id);
-      return TeamResponseDto.fromDomain(team);
-    } catch (error) {
-      if (error instanceof TeamNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      throw error;
-    }
+    const team = await this.getTeamUseCase.execute(id);
+    return TeamResponseDto.fromDomain(team);
   }
 
   @Post()
@@ -69,13 +59,6 @@ export class TeamController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id') id: string): Promise<void> {
-    try {
-      await this.deleteTeamUseCase.execute(id);
-    } catch (error) {
-      if (error instanceof TeamNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      throw error;
-    }
+    await this.deleteTeamUseCase.execute(id);
   }
 }

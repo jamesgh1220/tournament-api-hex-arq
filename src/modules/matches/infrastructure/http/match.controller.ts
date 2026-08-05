@@ -10,7 +10,6 @@ import {
   UseGuards,
   HttpStatus,
   Controller,
-  NotFoundException,
 } from '@nestjs/common';
 import { MatchDto } from './dto/match.dto';
 import { UpdateMatchDto } from './dto/update-match.dto';
@@ -28,7 +27,6 @@ import { GetAllMatchesUseCase } from '../../application/get-all-matches.use-case
 import { UpdateMatchUseCase } from '../../application/update-match.use-case';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth-guard';
 import { MatchResponseDto } from './dto/match-response.dto';
-import { MatchNotFoundError } from '../../domain/errors';
 import { MatchUpdateData } from '../../domain/match.entity';
 
 @UseGuards(JwtAuthGuard)
@@ -73,41 +71,20 @@ export class MatchController {
       scheduledAt: dto.scheduledAt ? new Date(dto.scheduledAt) : undefined,
     };
 
-    try {
-      const match = await this.updateMatchUseCase.execute(id, data);
-      return MatchResponseDto.fromDomain(match);
-    } catch (error) {
-      if (error instanceof MatchNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      throw error;
-    }
+    const match = await this.updateMatchUseCase.execute(id, data);
+    return MatchResponseDto.fromDomain(match);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id') id: string): Promise<void> {
-    try {
-      await this.deleteMatchUseCase.execute(id);
-    } catch (error) {
-      if (error instanceof MatchNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      throw error;
-    }
+    await this.deleteMatchUseCase.execute(id);
   }
 
   @Get(':id')
   async get(@Param('id') id: string): Promise<MatchResponseDto> {
-    try {
-      const match = await this.getMatchUseCase.execute(id);
-      return MatchResponseDto.fromDomain(match);
-    } catch (error) {
-      if (error instanceof MatchNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      throw error;
-    }
+    const match = await this.getMatchUseCase.execute(id);
+    return MatchResponseDto.fromDomain(match);
   }
 
   @Get()

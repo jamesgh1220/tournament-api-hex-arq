@@ -226,7 +226,9 @@ private repo(): Repository<MatchOrmEntity> {
 |-------|-----------|-----|
 | `ApiResponse<T>` | `src/common/interfaces/api-response.interface.ts` | Envelope de respuesta `{ success, statusCode, message, data, error, timestamp }` |
 | `ResponseInterceptor` | `src/common/interceptors/response.interceptor.ts` | Global; envuelve respuestas exitosas (salvo HTTP 204) |
-| `HttpExceptionFilter` | `src/common/filters/http-exception.filter.ts` | Global; normaliza errores en el mismo envelope |
+| `HttpExceptionFilter` | `src/common/filters/http-exception.filter.ts` | Global; normaliza `HttpException` en el envelope |
+| `DomainExceptionFilter` | `src/common/filters/domain-exception.filter.ts` | Global; traduce `DomainError` → HTTP según `statusCode`/`code` |
+| `DomainError` | `src/common/domain/domain-error.ts` | Clase base de errores de dominio (sin NestJS) |
 | `JwtAuthGuard` | `src/common/guards/jwt-auth-guard.ts` | Guard JWT aplicado por controller |
 | `ValidationPipe` | `src/main.ts` | `whitelist: true, forbidNonWhitelisted: true` → fuerza validación estricta de DTOs |
 
@@ -235,7 +237,7 @@ private repo(): Repository<MatchOrmEntity> {
 ```typescript
 app.enableCors();
 app.useGlobalInterceptors(new ResponseInterceptor());
-app.useGlobalFilters(new HttpExceptionFilter());
+app.useGlobalFilters(new DomainExceptionFilter(), new HttpExceptionFilter());
 app.useGlobalPipes(new ValidationPipe({
   whitelist: true,
   transform: true,

@@ -4,12 +4,8 @@ import {
   Body,
   Param,
   Inject,
-  Delete,
-  HttpCode,
   UseGuards,
-  HttpStatus,
   Controller,
-  NotFoundException,
 } from '@nestjs/common';
 import { PhaseDto } from './dto/phase.dto';
 import {
@@ -24,10 +20,6 @@ import { GetPhaseByTournamentUseCase } from '../../application/get-phase-by-tour
 import { HasAssignedFixtureUseCase } from '../../application/has-assigned-fixture-phase.use-case';
 import { PhaseResponseDto } from './dto/phase-response.dto';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth-guard';
-import {
-  PhaseByStatusNotFoundError,
-  PhaseByTournamentNotFoundError,
-} from '../../domain/errors';
 
 @UseGuards(JwtAuthGuard)
 @Controller('phases')
@@ -61,45 +53,24 @@ export class PhaseController {
     @Param('tournamentId') tournamentId: string,
     @Param('status') status: string,
   ): Promise<PhaseResponseDto> {
-    try {
-      const phase = await this.getPhaseByStatusUseCase.execute(
-        tournamentId,
-        status,
-      );
-      return PhaseResponseDto.fromDomain(phase);
-    } catch (error) {
-      if (error instanceof PhaseByStatusNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      throw error;
-    }
+    const phase = await this.getPhaseByStatusUseCase.execute(
+      tournamentId,
+      status,
+    );
+    return PhaseResponseDto.fromDomain(phase);
   }
 
   @Get('tournament/:tournamentId')
   async getByTournament(
     @Param('tournamentId') tournamentId: string,
   ): Promise<PhaseResponseDto> {
-    try {
-      const phase =
-        await this.getPhaseByTournamentUseCase.execute(tournamentId);
-      return PhaseResponseDto.fromDomain(phase);
-    } catch (error) {
-      if (error instanceof PhaseByTournamentNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      throw error;
-    }
+    const phase =
+      await this.getPhaseByTournamentUseCase.execute(tournamentId);
+    return PhaseResponseDto.fromDomain(phase);
   }
 
   @Get(':id/has-fixture')
   async getHasAssignedFixture(@Param('id') id: string): Promise<boolean> {
-    try {
-      return await this.hasAssignedFixtureUseCase.execute(id);
-    } catch (error) {
-      if (error instanceof PhaseByTournamentNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      throw error;
-    }
+    return await this.hasAssignedFixtureUseCase.execute(id);
   }
 }

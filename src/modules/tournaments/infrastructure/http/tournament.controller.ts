@@ -9,8 +9,6 @@ import {
   UseGuards,
   HttpStatus,
   Controller,
-  NotFoundException,
-  BadRequestException,
 } from '@nestjs/common';
 import { TournamentDto } from './dto/tournament.dto';
 import {
@@ -32,16 +30,6 @@ import { RemoveTeamFromTournamentUseCase } from '../../application/remove-team-f
 import { TournamentResponseDto } from './dto/tournament-response.dto';
 import { GeneratedMatchSummaryDto } from './dto/generated-match-summary.dto';
 import { GenerateFixtureUseCase } from '../../application/generate-fixture.use-case';
-import {
-  TournamentNotFoundError,
-  TeamNotFoundError,
-  TeamAlreadyInTournamentError,
-  TeamNotInTournamentError,
-  GenerateGixtureTournamentError,
-  PhaseActiveByTournamentNotFoundError,
-  InsufficientTeamsForFixtureError,
-  PhaseHasAssignedFixtureError,
-} from '../../domain/errors';
 
 @UseGuards(JwtAuthGuard)
 @Controller('tournaments')
@@ -82,28 +70,14 @@ export class TournamentController {
 
   @Get(':id')
   async findById(@Param('id') id: string): Promise<TournamentResponseDto> {
-    try {
-      const tournament = await this.getTournamentUseCase.execute(id);
-      return TournamentResponseDto.fromDomain(tournament);
-    } catch (error) {
-      if (error instanceof TournamentNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      throw error;
-    }
+    const tournament = await this.getTournamentUseCase.execute(id);
+    return TournamentResponseDto.fromDomain(tournament);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id') id: string): Promise<void> {
-    try {
-      return await this.deleteTournamentUseCase.execute(id);
-    } catch (error) {
-      if (error instanceof TournamentNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      throw error;
-    }
+    return await this.deleteTournamentUseCase.execute(id);
   }
 
   @Post(':id/teams/:teamId')
@@ -111,24 +85,11 @@ export class TournamentController {
     @Param('id') id: string,
     @Param('teamId') teamId: string,
   ): Promise<TournamentResponseDto> {
-    try {
-      const tournament = await this.addTeamToTournamentUseCase.execute(
-        id,
-        teamId,
-      );
-      return TournamentResponseDto.fromDomain(tournament);
-    } catch (error) {
-      if (error instanceof TournamentNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      if (error instanceof TeamNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      if (error instanceof TeamAlreadyInTournamentError) {
-        throw new NotFoundException(error.message);
-      }
-      throw error;
-    }
+    const tournament = await this.addTeamToTournamentUseCase.execute(
+      id,
+      teamId,
+    );
+    return TournamentResponseDto.fromDomain(tournament);
   }
 
   @Delete(':id/teams/:teamId')
@@ -137,46 +98,14 @@ export class TournamentController {
     @Param('id') id: string,
     @Param('teamId') teamId: string,
   ) {
-    try {
-      return await this.removeTeamFromTournamentUseCase.execute(id, teamId);
-    } catch (error) {
-      if (error instanceof TournamentNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      if (error instanceof TeamNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      if (error instanceof TeamNotInTournamentError) {
-        throw new NotFoundException(error.message);
-      }
-      throw error;
-    }
+    return await this.removeTeamFromTournamentUseCase.execute(id, teamId);
   }
 
   @Post(':id/generate-fixture')
   async generateFixture(
     @Param('id') id: string,
   ): Promise<GeneratedMatchSummaryDto[]> {
-    try {
-      const summaries = await this.generateFixtureUseCase.execute(id);
-      return summaries.map((s) => GeneratedMatchSummaryDto.fromSummary(s));
-    } catch (error) {
-      if (error instanceof TournamentNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      if (error instanceof PhaseActiveByTournamentNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      if (error instanceof InsufficientTeamsForFixtureError) {
-        throw new BadRequestException(error.message); // 400
-      }
-      if (error instanceof GenerateGixtureTournamentError) {
-        throw new BadRequestException(error.message);
-      }
-      if (error instanceof PhaseHasAssignedFixtureError) {
-        throw new BadRequestException(error.message);
-      }
-      throw error;
-    }
+    const summaries = await this.generateFixtureUseCase.execute(id);
+    return summaries.map((s) => GeneratedMatchSummaryDto.fromSummary(s));
   }
 }

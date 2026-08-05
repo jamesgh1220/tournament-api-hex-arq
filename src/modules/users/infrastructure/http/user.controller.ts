@@ -5,7 +5,6 @@ import {
   Param,
   Inject,
   Controller,
-  NotFoundException,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
@@ -22,7 +21,6 @@ import {
   GET_ALL_USERS_USE_CASE,
   LOGIN_USER_USE_CASE,
 } from '../../user.tokens';
-import { UserNotFoundError } from '../../domain/errors';
 
 @Controller('users')
 export class UserController {
@@ -66,14 +64,7 @@ export class UserController {
 
   @Get(':id')
   async findById(@Param('id') id: string): Promise<UserResponseDto> {
-    try {
-      const user = await this.getUserUseCase.execute(id);
-      return UserResponseDto.fromDomain(user);
-    } catch (error) {
-      if (error instanceof UserNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      throw error;
-    }
+    const user = await this.getUserUseCase.execute(id);
+    return UserResponseDto.fromDomain(user);
   }
 }

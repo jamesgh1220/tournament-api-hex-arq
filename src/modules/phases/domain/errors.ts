@@ -1,20 +1,28 @@
-export class PhaseByIdNotFoundError extends Error {
+import { DomainError } from 'src/common/domain/domain-error';
+
+export class PhaseByIdNotFoundError extends DomainError {
+  readonly code = 'PHASE_BY_ID_NOT_FOUND';
+  readonly statusCode = 404;
+
   constructor(id: string) {
     super(`Fase con id ${id} no encontrada.`);
-    this.name = 'PhaseByIdNotFoundError';
   }
 }
 
-export class PhaseByStatusNotFoundError extends Error {
+export class PhaseByStatusNotFoundError extends DomainError {
+  readonly code = 'PHASE_BY_STATUS_NOT_FOUND';
+  readonly statusCode = 404;
+
   constructor(status: string) {
     super(`Fase con estado ${status} no encontrada.`);
-    this.name = 'PhaseByStatusNotFoundError';
   }
 }
 
-export class PhaseByTournamentNotFoundError extends Error {
+export class PhaseByTournamentNotFoundError extends DomainError {
+  readonly code = 'PHASE_BY_TOURNAMENT_NOT_FOUND';
+  readonly statusCode = 404;
+
   constructor(tournamentId: string) {
     super(`Fase para el torneo con id ${tournamentId} no encontrada.`);
-    this.name = 'PhaseByStatusNotFoundError';
   }
 }

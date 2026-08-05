@@ -9,7 +9,6 @@ import {
   UseGuards,
   HttpStatus,
   Controller,
-  NotFoundException,
 } from '@nestjs/common';
 import { PhaseTypeDto } from './dto/phase-type.dto';
 import {
@@ -24,7 +23,6 @@ import { GetPhaseTypeUseCase } from '../../application/get-phase-type.use-case';
 import { DeletePhaseTypeUseCase } from '../../application/delete-phase-type.use-case';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth-guard';
 import { PhaseTypeResponseDto } from './dto/phase-type-response.dto';
-import { PhaseTypeNotFoundError } from '../../domain/errors';
 
 @UseGuards(JwtAuthGuard)
 @Controller('phase-types')
@@ -54,27 +52,13 @@ export class PhaseTypeController {
 
   @Get(':id')
   async get(@Param('id') id: string): Promise<PhaseTypeResponseDto> {
-    try {
-      const type = await this.getPhaseTypeUseCase.execute(id);
-      return PhaseTypeResponseDto.fromDomain(type);
-    } catch (error) {
-      if (error instanceof PhaseTypeNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      throw error;
-    }
+    const type = await this.getPhaseTypeUseCase.execute(id);
+    return PhaseTypeResponseDto.fromDomain(type);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id') id: string): Promise<void> {
-    try {
-      await this.detelePhaseTypeUseCase.execute(id);
-    } catch (error) {
-      if (error instanceof PhaseTypeNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      throw error;
-    }
+    await this.detelePhaseTypeUseCase.execute(id);
   }
 }
