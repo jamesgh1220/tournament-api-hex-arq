@@ -189,19 +189,19 @@ import { UpdateMatchStandingUseCase } from './application/update-match-standing.
         tournamentRepository: TournamentRepositoryPort,
         matchLookup: MatchLookupPort,
         unitOfWork: UnitOfWorkPort,
-        phaseLookup: PhaseLookupPort,
+        standingSetup: StandingSetupPort,
       ) =>
         new UpdateMatchStandingUseCase(
           tournamentRepository,
           matchLookup,
           unitOfWork,
-          phaseLookup,
+          standingSetup,
         ),
       inject: [
         TOURNAMENT_REPOSITORY,
         UPDATE_MATCH_PORT,
         UNIT_OF_WORK,
-        PHASE_LOOKUP,
+        STANDING_SETUP_PORT,
       ],
     },
   ],

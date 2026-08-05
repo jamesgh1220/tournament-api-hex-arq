@@ -2,7 +2,7 @@ import { MatchResult } from '../value-objects/match-result.vo';
 
 export interface MatchLookupPort {
   // TODO: tipar respuesta
-  matchExists(matchId: string, phaseId: string);
+  matchExists(matchId: string);
   // TODO: tipar respuesta
   update(matchId: string, result: MatchResult);
 }

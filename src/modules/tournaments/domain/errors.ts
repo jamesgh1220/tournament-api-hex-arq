@@ -107,8 +107,8 @@ export class MatchNotFoundError extends DomainError {
   readonly code = 'MATCH_TOURNAMENT_NOT_FOUND';
   readonly statusCode = 404;
 
-  constructor(id: string, phaseId: string) {
-    super(`Partido con id ${id} no encontrado en la fase con id ${phaseId}`);
+  constructor(id: string) {
+    super(`Partido con id ${id} no encontrado`);
   }
 }
 
@@ -127,5 +127,14 @@ export class InvalidMatchStatusError extends DomainError {
 
   constructor(status: string) {
     super(`El estado del partido no es válido: ${status}`);
+  }
+}
+
+export class StandingNotFoundError extends DomainError {
+  readonly code = 'STANDING_TOURNAMENT_NOT_FOUND';
+  readonly statusCode = 404;
+
+  constructor(id: string, phaseId: string) {
+    super(`Tabla de posiciones con torneo id ${id} y fase id ${phaseId} no encontrado`);
   }
 }

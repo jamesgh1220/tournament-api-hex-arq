@@ -3,11 +3,11 @@ import { MatchLookupPort } from '../domain/ports/match-lookup.port';
 import {
   TournamentNotFoundError,
   MatchNotFoundError,
-  PhaseActiveByTournamentNotFoundError,
+  StandingNotFoundError,
 } from '../domain/errors';
 import { UnitOfWorkPort } from 'src/shared/application/ports/unit-of-work.port';
-import { PhaseLookupPort } from '../domain/ports/phase-lookup.port';
 import { MatchResult } from '../domain/value-objects/match-result.vo';
+import { StandingSetupPort } from '../domain/ports/standing-setup.port';
 
 export type UpdateMatchStandingInput = {
   homeScore: number;
@@ -20,7 +20,7 @@ export class UpdateMatchStandingUseCase {
     private readonly tournamentRepository: TournamentRepositoryPort,
     private readonly matchLookup: MatchLookupPort,
     private readonly unitOfWork: UnitOfWorkPort,
-    private readonly phaseLookup: PhaseLookupPort,
+    private readonly standingSetup: StandingSetupPort,
   ) {}
 
   async execute(
@@ -38,22 +38,44 @@ export class UpdateMatchStandingUseCase {
     const tournament = await this.tournamentRepository.findById(tournamentId);
     if (!tournament) throw new TournamentNotFoundError(tournamentId);
 
-    //Traer fase activa del torneo
-    const activePhase =
-      await this.phaseLookup.findActiveByTournament(tournamentId);
-    if (!activePhase || !activePhase.id)
-      throw new PhaseActiveByTournamentNotFoundError(tournamentId);
-
     //Validar existencia partido
-    const match = await this.matchLookup.matchExists(matchId, activePhase.id);
-    if (!match) throw new MatchNotFoundError(matchId, activePhase.id);
+    const match = await this.matchLookup.matchExists(matchId);
+    if (!match) throw new MatchNotFoundError(matchId);
+    
+    // Validar que exista la tabla de posiciones para el torneo en la fase activa
+    const standing = await this.standingSetup.exists(tournamentId, match.phaseId);
+    if (!standing) throw new StandingNotFoundError(tournamentId, match.phaseId);
 
     // Abrir transaction
     return this.unitOfWork.execute(async () => {
       // actualizar partido
       await this.matchLookup.update(matchId, result);
 
-      // actualizar posiciones
+      // actualizar posiciones equipo local
+      const infoHomeTeamMatch = {
+        wins: (result.homeScore > result.awayScore) ? 1 : 0,
+        draws: (result.homeScore === result.awayScore) ? 1 : 0,
+        losses: (result.homeScore < result.awayScore) ? 1 : 0,
+        goalsFor: result.homeScore,
+        goalsAgainst: result.awayScore,
+        points: (result.homeScore > result.awayScore)
+          ? 3 : (result.homeScore === result.awayScore)
+            ? 1 : 0,
+      };
+      await this.standingSetup.update(tournamentId, match.phaseId, match.homeTeamId, infoHomeTeamMatch);
+
+      // actualizar posiciones equipo visitante
+      const infoAwayTeamMatch = {
+        wins: (result.awayScore > result.homeScore) ? 1 : 0,
+        draws: (result.homeScore === result.awayScore) ? 1 : 0,
+        losses: (result.awayScore < result.homeScore) ? 1 : 0,
+        goalsFor: result.awayScore,
+        goalsAgainst: result.homeScore,
+        points: (result.awayScore > result.homeScore)
+          ? 3 : (result.homeScore === result.awayScore)
+            ? 1 : 0,
+      };
+      await this.standingSetup.update(tournamentId, match.phaseId, match.awayTeamId, infoAwayTeamMatch);
     });
   }
 }

@@ -45,6 +45,17 @@ export class StandingRepository implements StandingRepositoryPort {
     return orm ? this.toDomain(orm) : null;
   }
 
+  async findByPhaseTournament(tournamentId: string, phaseId: string): Promise<Standing | null> {
+    const orm = await this.standingRepository.findOne({
+      where: {
+        tournamentId,
+        phaseId,
+      },
+    });
+
+    return orm ? this.toDomain(orm) : null;
+  }
+
   async findByTournamentAndTeam(
     tournamentId: string,
     teamId: string,
@@ -56,6 +67,11 @@ export class StandingRepository implements StandingRepositoryPort {
       },
     });
 
+    return orm ? this.toDomain(orm) : null;
+  }
+
+  async findByParams(params: object): Promise<Standing | null> {
+    const orm = await this.standingRepository.findOne({ where: params });
     return orm ? this.toDomain(orm) : null;
   }
 

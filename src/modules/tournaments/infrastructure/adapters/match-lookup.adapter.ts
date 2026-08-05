@@ -17,10 +17,9 @@ export class MatchLookupAdapter implements MatchLookupPort {
   ) {}
 
   // TODO: tipar respuesta
-  async matchExists(matchId: string, phaseId: string) {
+  async matchExists(matchId: string) {
     return await this.getMatchByParamsUseCase.execute({
       id: matchId,
-      phaseId,
     });
   }
 
