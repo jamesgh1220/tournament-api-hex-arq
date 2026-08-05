@@ -5,6 +5,7 @@ import { MatchRepositoryPort } from '../../domain/match.repository.port';
 import { MatchOrmEntity } from './match.orm';
 import { Match } from '../../domain/match.entity';
 import { TransactionContext } from 'src/shared/infrastructure/persistence/transaction-context';
+import { UpdateMatchDto } from '../http/dto/update-match.dto';
 
 @Injectable()
 export class MatchRepository implements MatchRepositoryPort {
@@ -27,6 +28,11 @@ export class MatchRepository implements MatchRepositoryPort {
 
   async findAll(): Promise<Match[]> {
     return (await this.matchRepository.find()).map(this.toDomain);
+  }
+
+  async findByParams(params: object): Promise<Match | null> {
+    const orm = await this.matchRepository.findOne({ where: params });
+    return orm ? this.toDomain(orm) : null;
   }
 
   async create(match: Match): Promise<Match> {

@@ -9,6 +9,7 @@ import { GetAllMatchesUseCase } from './application/get-all-matches.use-cases';
 import { UpdateMatchUseCase } from './application/update-match.use-case';
 import { MatchRepositoryPort } from './domain/match.repository.port';
 import { GenerateMatchesUseCase } from './application/generate-matches.use-case';
+import { GetMatchByParamsUseCase } from './application/get-match-by-params.use-case';
 import {
   MATCH_REPOSITORY,
   CREATE_MATCH_USE_CASE,
@@ -17,6 +18,7 @@ import {
   GET_MATCH_USE_CASE,
   GET_ALL_MATCHES_USE_CASE,
   GENERATE_MATCHES_USE_CASE,
+  GET_MATCH_BY_PARAMS_USE_CASE
 } from './match.tokens';
 import { MatchController } from './infrastructure/http/match.controller';
 import { FixtureGenerator } from './domain/services/fixture-generator';
@@ -67,8 +69,18 @@ import { FixtureGenerator } from './domain/services/fixture-generator';
       ) => new GenerateMatchesUseCase(matchRepository, fixtureGenerator),
       inject: [MATCH_REPOSITORY, FixtureGenerator],
     },
+    {
+      provide: GET_MATCH_BY_PARAMS_USE_CASE,
+      useFactory: (matchRepository: MatchRepositoryPort) =>
+        new GetMatchByParamsUseCase(matchRepository),
+      inject: [MATCH_REPOSITORY, FixtureGenerator],
+    },
   ],
-  exports: [GENERATE_MATCHES_USE_CASE],
+  exports: [
+    UPDATE_MATCH_USE_CASE,
+    GENERATE_MATCHES_USE_CASE,
+    GET_MATCH_BY_PARAMS_USE_CASE,
+  ],
   controllers: [MatchController],
 })
 export class MatchesModule {}

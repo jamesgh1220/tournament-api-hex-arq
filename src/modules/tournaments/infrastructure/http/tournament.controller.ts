@@ -3,6 +3,7 @@ import {
   Post,
   Body,
   Param,
+  Patch,
   Inject,
   Delete,
   HttpCode,
@@ -19,6 +20,7 @@ import {
   ADD_TEAM_TO_TOURNAMENT_USE_CASE,
   REMOVE_TEAM_FROM_TOURNAMENT_USE_CASE,
   GENERATE_FIXTURE_TOURNAMENT_USE_CASE,
+  UPDATE_MATCH_STANDING_USE_CASE,
 } from '../../tournament.tokens';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth-guard';
 import { CreateTournamentUseCase } from '../../application/create-tournament.use-case';
@@ -30,6 +32,14 @@ import { RemoveTeamFromTournamentUseCase } from '../../application/remove-team-f
 import { TournamentResponseDto } from './dto/tournament-response.dto';
 import { GeneratedMatchSummaryDto } from './dto/generated-match-summary.dto';
 import { GenerateFixtureUseCase } from '../../application/generate-fixture.use-case';
+import { UpdateMatchStandingUseCase } from '../../application/update-match-standing.use-case';
+
+// todo: generalizar
+type UpdateMatch = {
+  homeScore: number;
+  awayScore: number;
+  status: string;
+};
 
 @UseGuards(JwtAuthGuard)
 @Controller('tournaments')
@@ -49,6 +59,8 @@ export class TournamentController {
     private readonly removeTeamFromTournamentUseCase: RemoveTeamFromTournamentUseCase,
     @Inject(GENERATE_FIXTURE_TOURNAMENT_USE_CASE)
     private readonly generateFixtureUseCase: GenerateFixtureUseCase,
+    @Inject(UPDATE_MATCH_STANDING_USE_CASE)
+    private readonly updateMatchStandingUseCase: UpdateMatchStandingUseCase,
   ) {}
 
   @Post()
@@ -107,5 +119,15 @@ export class TournamentController {
   ): Promise<GeneratedMatchSummaryDto[]> {
     const summaries = await this.generateFixtureUseCase.execute(id);
     return summaries.map((s) => GeneratedMatchSummaryDto.fromSummary(s));
+  }
+
+  // TODO: tipar respuesta
+  @Patch(':id/matches/:matchId/result')
+  async updateResult(
+    @Param('id') id: string,
+    @Param('matchId') matchId: string,
+    @Body() dto: UpdateMatch,
+  ) {
+    return await this.updateMatchStandingUseCase.execute(id, matchId, dto);
   }
 }

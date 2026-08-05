@@ -102,3 +102,12 @@ export class PhaseHasAssignedFixtureError extends DomainError {
     super(`La fase con id ${phaseId} ya tiene un fixture asignado.`);
   }
 }
+
+export class MatchNotFoundError extends DomainError {
+  readonly code = 'MATCH_TOURNAMENT_NOT_FOUND';
+  readonly statusCode = 404;
+
+  constructor(id: string, phaseId: string) {
+    super(`Partido con id ${id} no encontrado en la fase con id ${phaseId}`);
+  }
+}

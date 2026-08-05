@@ -18,12 +18,14 @@ import {
   ADD_TEAM_TO_TOURNAMENT_USE_CASE,
   REMOVE_TEAM_FROM_TOURNAMENT_USE_CASE,
   GENERATE_FIXTURE_TOURNAMENT_USE_CASE,
+  UPDATE_MATCH_STANDING_USE_CASE,
   TEAM_LOOKUP,
   PHASE_SETUP,
   PHASE_LOOKUP,
   PHASE_TYPE_PORT,
   FIXTURE_GENERATE_PORT,
   STANDING_SETUP_PORT,
+  UPDATE_MATCH_PORT,
 } from './tournament.tokens';
 import { UNIT_OF_WORK } from 'src/shared/shared.tokens';
 import { TournamentRepositoryPort } from './domain/tournament.repository.port';
@@ -46,6 +48,9 @@ import { UnitOfWorkPort } from 'src/shared/application/ports/unit-of-work.port';
 import { StandingSetupPort } from './domain/ports/standing-setup.port';
 import { StandingSetupAdapter } from './infrastructure/adapters/standing-setup.adapter';
 import { StandingsModule } from '../standings/standings.module';
+import { MatchLookupPort } from './domain/ports/match-lookup.port';
+import { MatchLookupAdapter } from './infrastructure/adapters/match-lookup.adapter';
+import { UpdateMatchStandingUseCase } from './application/update-match-standing.use-case';
 
 @Module({
   imports: [
@@ -60,6 +65,10 @@ import { StandingsModule } from '../standings/standings.module';
     {
       provide: TOURNAMENT_REPOSITORY,
       useClass: TournamentRepository,
+    },
+    {
+      provide: UPDATE_MATCH_PORT,
+      useClass: MatchLookupAdapter,
     },
     {
       provide: STANDING_SETUP_PORT,
@@ -172,6 +181,27 @@ import { StandingsModule } from '../standings/standings.module';
         FIXTURE_GENERATE_PORT,
         UNIT_OF_WORK,
         STANDING_SETUP_PORT,
+      ],
+    },
+    {
+      provide: UPDATE_MATCH_STANDING_USE_CASE,
+      useFactory: (
+        tournamentRepository: TournamentRepositoryPort,
+        matchLookup: MatchLookupPort,
+        unitOfWork: UnitOfWorkPort,
+        phaseLookup: PhaseLookupPort,
+      ) =>
+        new UpdateMatchStandingUseCase(
+          tournamentRepository,
+          matchLookup,
+          unitOfWork,
+          phaseLookup,
+        ),
+      inject: [
+        TOURNAMENT_REPOSITORY,
+        UPDATE_MATCH_PORT,
+        UNIT_OF_WORK,
+        PHASE_LOOKUP,
       ],
     },
   ],

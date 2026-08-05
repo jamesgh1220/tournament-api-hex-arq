@@ -8,3 +8,12 @@ export class MatchNotFoundError extends DomainError {
     super(`Partido con id ${id} no encontrado`);
   }
 }
+
+export class MatchByParamsNotFoundError extends DomainError {
+  readonly code = 'MATCH_BY_PARAMS_NOT_FOUND';
+  readonly statusCode = 404;
+
+  constructor() {
+    super(`Partido con los parámetros especificados no ha sido encontrado.`);
+  }
+}
