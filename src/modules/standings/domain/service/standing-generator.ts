@@ -1,12 +1,6 @@
 import { randomUUID } from 'crypto';
 import { Standing } from '../standing.entity';
-// TODO:
-interface InitialStanding {
-  tournamentId: string;
-  phaseId: string;
-  teamId: string;
-  groupId?: string;
-}
+import { InitialStanding } from '../types/initial-standing';
 
 export class StandingGenerator {
   initialStandingLeague(standings: InitialStanding[]): Standing[] {

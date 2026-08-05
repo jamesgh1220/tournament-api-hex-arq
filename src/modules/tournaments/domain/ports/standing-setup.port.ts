@@ -1,6 +1,4 @@
-// TODO: llevar a un punto general
-
-interface InitialStanding {
+export interface InitialStandingInput {
   tournamentId: string;
   phaseId: string;
   teamId: string;
@@ -9,5 +7,7 @@ interface InitialStanding {
 
 // TODO: crear type de respuesta
 export interface StandingSetupPort {
-  initialize(standings: InitialStanding[]);
+  exists(tournamentId: string, phaseId: string);
+  initialize(standings: InitialStandingInput[]);
+  update(tournamentId: string, phaseId: string, teamId: string);
 }

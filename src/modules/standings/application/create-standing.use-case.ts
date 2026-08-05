@@ -1,15 +1,7 @@
-// import { randomUUID } from 'crypto';
 import { StandingGenerator } from '../domain/service/standing-generator';
 import { Standing } from '../domain/standing.entity';
 import { StandingRepositoryPort } from '../domain/standing.repository.port';
-
-// TODO:
-interface InitialStanding {
-  tournamentId: string;
-  phaseId: string;
-  teamId: string;
-  groupId?: string;
-}
+import { InitialStanding } from '../domain/types/initial-standing';
 
 export class CreateStandingUseCase {
   constructor(
