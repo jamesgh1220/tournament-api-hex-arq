@@ -111,3 +111,21 @@ export class MatchNotFoundError extends DomainError {
     super(`Partido con id ${id} no encontrado en la fase con id ${phaseId}`);
   }
 }
+
+export class InvalidMatchScoreError extends DomainError {
+  readonly code = 'INVALID_MATCH_SCORE';
+  readonly statusCode = 400;
+
+  constructor() {
+    super('Los goles deben ser enteros mayores o iguales a cero');
+  }
+}
+
+export class InvalidMatchStatusError extends DomainError {
+  readonly code = 'INVALID_MATCH_STATUS';
+  readonly statusCode = 400;
+
+  constructor(status: string) {
+    super(`El estado del partido no es válido: ${status}`);
+  }
+}

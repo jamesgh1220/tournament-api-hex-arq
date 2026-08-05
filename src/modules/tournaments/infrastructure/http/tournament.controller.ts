@@ -33,13 +33,7 @@ import { TournamentResponseDto } from './dto/tournament-response.dto';
 import { GeneratedMatchSummaryDto } from './dto/generated-match-summary.dto';
 import { GenerateFixtureUseCase } from '../../application/generate-fixture.use-case';
 import { UpdateMatchStandingUseCase } from '../../application/update-match-standing.use-case';
-
-// todo: generalizar
-type UpdateMatch = {
-  homeScore: number;
-  awayScore: number;
-  status: string;
-};
+import { UpdateMatchResultDto } from './dto/update-match-result.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('tournaments')
@@ -126,8 +120,12 @@ export class TournamentController {
   async updateResult(
     @Param('id') id: string,
     @Param('matchId') matchId: string,
-    @Body() dto: UpdateMatch,
+    @Body() dto: UpdateMatchResultDto,
   ) {
-    return await this.updateMatchStandingUseCase.execute(id, matchId, dto);
+    return await this.updateMatchStandingUseCase.execute(id, matchId, {
+      homeScore: dto.homeScore,
+      awayScore: dto.awayScore,
+      status: dto.status,
+    });
   }
 }

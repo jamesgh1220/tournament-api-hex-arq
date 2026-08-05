@@ -7,12 +7,12 @@ import {
 } from '../domain/errors';
 import { UnitOfWorkPort } from 'src/shared/application/ports/unit-of-work.port';
 import { PhaseLookupPort } from '../domain/ports/phase-lookup.port';
+import { MatchResult } from '../domain/value-objects/match-result.vo';
 
-// todo: generalizar
-type UpdateMatch = {
-  homeScore: number,
-  awayScore: number,
-  status: string,
+export type UpdateMatchStandingInput = {
+  homeScore: number;
+  awayScore: number;
+  status: string;
 };
 
 export class UpdateMatchStandingUseCase {
@@ -26,8 +26,14 @@ export class UpdateMatchStandingUseCase {
   async execute(
     tournamentId: string,
     matchId: string,
-    data: UpdateMatch,
+    data: UpdateMatchStandingInput,
   ) {
+    const result = MatchResult.create(
+      data.homeScore,
+      data.awayScore,
+      data.status,
+    );
+
     // Validar existencia torneo
     const tournament = await this.tournamentRepository.findById(tournamentId);
     if (!tournament) throw new TournamentNotFoundError(tournamentId);
@@ -45,7 +51,7 @@ export class UpdateMatchStandingUseCase {
     // Abrir transaction
     return this.unitOfWork.execute(async () => {
       // actualizar partido
-      await this.matchLookup.update(matchId, data);
+      await this.matchLookup.update(matchId, result);
 
       // actualizar posiciones
     });
