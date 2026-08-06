@@ -1,3 +1,13 @@
+export interface StandingUpdateData {
+  played: number,
+  wins: number,
+  draws: number,
+  losses: number,
+  goalsFor: number,
+  goalsAgainst: number,
+  points: number,
+}
+
 export class Standing {
   constructor(
     private readonly _id: string,
@@ -158,5 +168,22 @@ export class Standing {
 
   get teamId(): string {
     return this._teamId;
+  }
+
+  copyWith(data: StandingUpdateData) {
+    return new Standing(
+      this._id,
+      data.played,
+      data.wins,
+      data.draws,
+      data.losses,
+      data.goalsFor,
+      data.goalsAgainst,
+      data.points,
+      this._tournamentId,
+      this._teamId,
+      this._phaseId,
+      this._groupId,
+    );
   }
 }

@@ -14,8 +14,7 @@ export class UpdateStandingAfterMatchUseCase {
     teamId: string,
     stats: StandingStats,
   ) {
-    // TODO: trycatch
-    // consultar standing con homeTeamId
+    // consultar standing
     const teamStanding = await this.standingRepository.findByParams({
       tournamentId,
       phaseId,
@@ -27,16 +26,10 @@ export class UpdateStandingAfterMatchUseCase {
         `Error encontrando la tabla de posiciones para el torneo con id ${tournamentId} y el equipo con id ${teamId}`,
       );
 
-    const calculatedStandingHomeTeam =
+    const calculatedStandingTeam =
       this.standingGenerator.calculateStandingAfterMatch(teamStanding, stats);
-    const teamStandingUpdated = {
-      ...teamStanding,
-      ...calculatedStandingHomeTeam,
-    };
-    console.log('test: ', teamStandingUpdated);
 
     // Guardar
-
-    // consultar standing con awayTeamId
+    return await this.standingRepository.update(calculatedStandingTeam);
   }
 }

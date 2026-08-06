@@ -23,20 +23,20 @@ export class StandingGenerator {
     );
   }
 
-  // generateUpdateStanding(standing: Standing): Standing {
-
-  // }
-
-  // TODO: tipar respuesta
-  calculateStandingAfterMatch(standing: Standing, stats: StandingStats) {
-    return {
-      _played: standing.played + 1,
-      _wins: standing.wins + stats.wins,
-      _draws: standing.draws + stats.draws,
-      _losses: standing.losses + stats.losses,
-      _goalsFor: standing.goalsFor + stats.goalsFor,
-      _goalsAgainst: standing.goalsAgainst + stats.goalsAgainst,
-      _points: standing.points + stats.points,
-    };
+  calculateStandingAfterMatch(standing: Standing, stats: StandingStats): Standing {
+    return new Standing(
+      standing.id,
+      standing.played + 1,
+      standing.wins + stats.wins,
+      standing.draws + stats.draws,
+      standing.losses + stats.losses,
+      standing.goalsFor + stats.goalsFor,
+      standing.goalsAgainst + stats.goalsAgainst,
+      standing.points + stats.points,
+      standing.tournamentId,
+      standing.teamId,
+      standing.phaseId,
+      standing.groupId,
+    );
   }
 }

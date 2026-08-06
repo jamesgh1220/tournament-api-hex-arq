@@ -31,8 +31,24 @@ export class StandingRepository implements StandingRepositoryPort {
     return saved.map(this.toDomain);
   }
 
-  async update(standing: Standing): Promise<Standing> {
-    throw new Error('Method not implemented.');
+  async update(standing: Standing): Promise<Standing | null> {
+    const orm = await this.repo().findOneBy({ id: standing.id });
+    if (!orm) return null;
+
+    orm.played = standing.played;
+    orm.wins = standing.wins;
+    orm.draws = standing.draws;
+    orm.losses = standing.losses;
+    orm.goalsFor = standing.goalsFor;
+    orm.goalsAgainst = standing.goalsAgainst;
+    orm.points = standing.points;
+    orm.tournamentId = standing.tournamentId;
+    orm.teamId = standing.teamId;
+    orm.phaseId = standing.phaseId;
+    orm.groupId = standing.groupId ?? null;
+
+    const saved = await this.repo().save(orm);
+    return this.toDomain(saved);
   }
 
   async findByTournament(tournamentId: string): Promise<Standing | null> {

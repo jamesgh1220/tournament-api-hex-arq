@@ -8,3 +8,12 @@ export class StandingByTournamentNotFoundError extends DomainError {
     super(`Tabla de posiciones para el torneo con id ${id} no encontrado`);
   }
 }
+
+export class StandingNotFoundError extends DomainError {
+  readonly code = 'STANDING_NOT_FOUND';
+  readonly statusCode = 404;
+
+  constructor(id: string) {
+    super(`Tabla de posiciones con torneo id ${id} no encontrado`);
+  }
+}
