@@ -34,6 +34,7 @@ import { GeneratedMatchSummaryDto } from './dto/generated-match-summary.dto';
 import { GenerateFixtureUseCase } from '../../application/generate-fixture.use-case';
 import { UpdateMatchStandingUseCase } from '../../application/update-match-standing.use-case';
 import { UpdateMatchResultDto } from './dto/update-match-result.dto';
+import { StandingResponseDto } from './dto/standing-response.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('tournaments')
@@ -115,17 +116,21 @@ export class TournamentController {
     return summaries.map((s) => GeneratedMatchSummaryDto.fromSummary(s));
   }
 
-  // TODO: tipar respuesta
   @Patch(':id/matches/:matchId/result')
   async updateResult(
     @Param('id') id: string,
     @Param('matchId') matchId: string,
     @Body() dto: UpdateMatchResultDto,
-  ) {
-    return await this.updateMatchStandingUseCase.execute(id, matchId, {
-      homeScore: dto.homeScore,
-      awayScore: dto.awayScore,
-      status: dto.status,
-    });
+  ): Promise<StandingResponseDto> {
+    const standing = await this.updateMatchStandingUseCase.execute(
+      id,
+      matchId,
+      {
+        homeScore: dto.homeScore,
+        awayScore: dto.awayScore,
+        status: dto.status,
+      },
+    );
+    return StandingResponseDto.fromDomain(standing);
   }
 }

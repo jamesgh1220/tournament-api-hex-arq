@@ -1,4 +1,4 @@
-import { MatchResultStatus } from "../enums/match-result-status.enum";
+import { MatchResultStatus } from '../enums/match-result-status.enum';
 
 export class MatchTournament {
   constructor(

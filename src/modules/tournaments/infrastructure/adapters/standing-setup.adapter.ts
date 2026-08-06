@@ -25,7 +25,10 @@ export class StandingSetupAdapter implements StandingSetupPort {
     private readonly updateStandingAfterMatchUseCase: UpdateStandingAfterMatchUseCase,
   ) {}
 
-  async exists(tournamentId: string, phaseId: string): Promise<StandingTournament> {
+  async exists(
+    tournamentId: string,
+    phaseId: string,
+  ): Promise<StandingTournament> {
     const standing = await this.getStandingByPhaseTournamentUseCase.execute(
       tournamentId,
       phaseId,
@@ -46,16 +49,33 @@ export class StandingSetupAdapter implements StandingSetupPort {
       standing.groupId,
     );
   }
-  // TODO: tipar respuesta
-  async initialize(standings: InitialStandingInput[]) {
-    const initialStanding =
-      await this.createStandingUseCase.execute(standings);
+
+  async initialize(
+    standings: InitialStandingInput[],
+  ): Promise<StandingTournament[]> {
+    const initialStanding = await this.createStandingUseCase.execute(standings);
     if (!initialStanding)
       throw new Error(`
         Error creando la tabla de posiciones inicial para el torneo.
       `);
 
-    return initialStanding;
+    return initialStanding.map(
+      (standing) =>
+        new StandingTournament(
+          standing.id,
+          standing.played,
+          standing.wins,
+          standing.draws,
+          standing.losses,
+          standing.goalsFor,
+          standing.goalsAgainst,
+          standing.points,
+          standing.tournamentId,
+          standing.teamId,
+          standing.phaseId,
+          standing.groupId,
+        ),
+    );
   }
 
   async update(
@@ -70,7 +90,7 @@ export class StandingSetupAdapter implements StandingSetupPort {
       teamId,
       stats,
     );
-    if (!standing) throw new StandingNotFoundError(tournamentId, phaseId)
+    if (!standing) throw new StandingNotFoundError(tournamentId, phaseId);
 
     return new StandingTournament(
       standing.id,

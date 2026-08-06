@@ -46,7 +46,8 @@ export class GenerateFixtureUseCase {
       tournamentId,
       activePhase.id,
     );
-    if (standing) throw new StandingAlreadyExistsError(tournamentId, activePhase.id);
+    if (standing)
+      throw new StandingAlreadyExistsError(tournamentId, activePhase.id);
 
     return this.unitOfWork.execute(async () => {
       const { teams, startDate, configuration } = tournament;

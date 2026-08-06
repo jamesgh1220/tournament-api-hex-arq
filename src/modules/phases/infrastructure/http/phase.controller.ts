@@ -64,8 +64,7 @@ export class PhaseController {
   async getByTournament(
     @Param('tournamentId') tournamentId: string,
   ): Promise<PhaseResponseDto> {
-    const phase =
-      await this.getPhaseByTournamentUseCase.execute(tournamentId);
+    const phase = await this.getPhaseByTournamentUseCase.execute(tournamentId);
     return PhaseResponseDto.fromDomain(phase);
   }
 

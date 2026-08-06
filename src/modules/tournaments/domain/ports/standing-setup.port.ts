@@ -1,4 +1,4 @@
-import { StandingTournament } from "../value-objects/standing-tournament.vo";
+import { StandingTournament } from '../value-objects/standing-tournament.vo';
 
 export interface InitialStandingInput {
   tournamentId: string;
@@ -18,8 +18,7 @@ export interface StandingStatsInput {
 
 export interface StandingSetupPort {
   exists(tournamentId: string, phaseId: string): Promise<StandingTournament>;
-  // TODO: crear type de respuesta
-  initialize(standings: InitialStandingInput[]);
+  initialize(standings: InitialStandingInput[]): Promise<StandingTournament[]>;
   update(
     tournamentId: string,
     phaseId: string,

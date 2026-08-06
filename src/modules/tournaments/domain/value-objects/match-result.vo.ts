@@ -1,8 +1,5 @@
 import { MatchResultStatus } from '../enums/match-result-status.enum';
-import {
-  InvalidMatchScoreError,
-  InvalidMatchStatusError,
-} from '../errors';
+import { InvalidMatchScoreError, InvalidMatchStatusError } from '../errors';
 
 export class MatchResult {
   private constructor(
@@ -28,11 +25,7 @@ export class MatchResult {
       throw new InvalidMatchStatusError(status);
     }
 
-    return new MatchResult(
-      homeScore,
-      awayScore,
-      status as MatchResultStatus,
-    );
+    return new MatchResult(homeScore, awayScore, status as MatchResultStatus);
   }
 
   get homeScore(): number {

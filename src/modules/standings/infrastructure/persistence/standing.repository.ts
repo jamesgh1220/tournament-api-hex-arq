@@ -61,7 +61,10 @@ export class StandingRepository implements StandingRepositoryPort {
     return orm ? this.toDomain(orm) : null;
   }
 
-  async findByPhaseTournament(tournamentId: string, phaseId: string): Promise<Standing | null> {
+  async findByPhaseTournament(
+    tournamentId: string,
+    phaseId: string,
+  ): Promise<Standing | null> {
     const orm = await this.standingRepository.findOne({
       where: {
         tournamentId,

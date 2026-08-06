@@ -13,9 +13,11 @@ export class CreateStandingUseCase {
   async execute(standings: InitialStanding[]): Promise<Standing[]> {
     const initialStandings =
       this.standingGenerator.initialStandingLeague(standings);
-    const savedStandings = await this.standingRepository.createMany(initialStandings);
+    const savedStandings =
+      await this.standingRepository.createMany(initialStandings);
 
-    if (!initialStandings || !savedStandings) throw new StandingPersistenceError();
+    if (!initialStandings || !savedStandings)
+      throw new StandingPersistenceError();
 
     return initialStandings;
   }

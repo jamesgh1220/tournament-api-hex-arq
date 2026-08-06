@@ -9,6 +9,7 @@ import { UnitOfWorkPort } from 'src/shared/application/ports/unit-of-work.port';
 import { MatchResult } from '../domain/value-objects/match-result.vo';
 import { StandingSetupPort } from '../domain/ports/standing-setup.port';
 import { toStandingStats } from '../domain/services/match-result-to-standing-stats';
+import { StandingTournament } from '../domain/value-objects/standing-tournament.vo';
 
 export type UpdateMatchStandingInput = {
   homeScore: number;
@@ -28,7 +29,7 @@ export class UpdateMatchStandingUseCase {
     tournamentId: string,
     matchId: string,
     data: UpdateMatchStandingInput,
-  ) {
+  ): Promise<StandingTournament> {
     const result = MatchResult.create(
       data.homeScore,
       data.awayScore,
@@ -64,7 +65,7 @@ export class UpdateMatchStandingUseCase {
       );
 
       // actualizar posiciones equipo visitante
-      await this.standingSetup.update(
+      return await this.standingSetup.update(
         tournamentId,
         match.phaseId,
         match.awayTeamId,

@@ -23,7 +23,10 @@ export class StandingGenerator {
     );
   }
 
-  calculateStandingAfterMatch(standing: Standing, stats: StandingStats): Standing {
+  calculateStandingAfterMatch(
+    standing: Standing,
+    stats: StandingStats,
+  ): Standing {
     return new Standing(
       standing.id,
       standing.played + 1,

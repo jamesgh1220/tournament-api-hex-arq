@@ -18,7 +18,7 @@ import {
   GET_MATCH_USE_CASE,
   GET_ALL_MATCHES_USE_CASE,
   GENERATE_MATCHES_USE_CASE,
-  GET_MATCH_BY_PARAMS_USE_CASE
+  GET_MATCH_BY_PARAMS_USE_CASE,
 } from './match.tokens';
 import { MatchController } from './infrastructure/http/match.controller';
 import { FixtureGenerator } from './domain/services/fixture-generator';

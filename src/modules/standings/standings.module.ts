@@ -59,7 +59,10 @@ import { UpdateStandingAfterMatchUseCase } from './application/update-standing-a
         standingRepository: StandingRepositoryPort,
         standingGenerator: StandingGenerator,
       ) =>
-        new UpdateStandingAfterMatchUseCase(standingRepository, standingGenerator),
+        new UpdateStandingAfterMatchUseCase(
+          standingRepository,
+          standingGenerator,
+        ),
       inject: [STANDING_REPOSITORY, StandingGenerator],
     },
   ],
