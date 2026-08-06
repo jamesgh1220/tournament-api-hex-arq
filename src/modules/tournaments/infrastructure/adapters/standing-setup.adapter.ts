@@ -12,6 +12,8 @@ import {
   GET_STANDING_BY_PHASE_TOURNAMENT_USE_CASE,
   UPDATE_STANDING_AFTER_MATCH_USE_CASE,
 } from 'src/modules/standings/standing.tokens';
+import { StandingTournament } from '../../domain/value-objects/standing-tournament.vo';
+import { StandingNotFoundError } from '../../domain/errors';
 
 export class StandingSetupAdapter implements StandingSetupPort {
   constructor(
@@ -23,13 +25,26 @@ export class StandingSetupAdapter implements StandingSetupPort {
     private readonly updateStandingAfterMatchUseCase: UpdateStandingAfterMatchUseCase,
   ) {}
 
-  async exists(tournamentId: string, phaseId: string): Promise<boolean> {
+  async exists(tournamentId: string, phaseId: string): Promise<StandingTournament> {
     const standing = await this.getStandingByPhaseTournamentUseCase.execute(
       tournamentId,
       phaseId,
     );
 
-    return !!standing;
+    return new StandingTournament(
+      standing.id,
+      standing.played,
+      standing.wins,
+      standing.draws,
+      standing.losses,
+      standing.goalsFor,
+      standing.goalsAgainst,
+      standing.points,
+      standing.tournamentId,
+      standing.teamId,
+      standing.phaseId,
+      standing.groupId,
+    );
   }
   // TODO: tipar respuesta
   async initialize(standings: InitialStandingInput[]) {
@@ -42,18 +57,34 @@ export class StandingSetupAdapter implements StandingSetupPort {
 
     return initialStanding;
   }
-  // TODO: tipar respuesta
+
   async update(
     tournamentId: string,
     phaseId: string,
     teamId: string,
     stats: StandingStatsInput,
-  ) {
-    return await this.updateStandingAfterMatchUseCase.execute(
+  ): Promise<StandingTournament> {
+    const standing = await this.updateStandingAfterMatchUseCase.execute(
       tournamentId,
       phaseId,
       teamId,
       stats,
+    );
+    if (!standing) throw new StandingNotFoundError(tournamentId, phaseId)
+
+    return new StandingTournament(
+      standing.id,
+      standing.played,
+      standing.wins,
+      standing.draws,
+      standing.losses,
+      standing.goalsFor,
+      standing.goalsAgainst,
+      standing.points,
+      standing.tournamentId,
+      standing.teamId,
+      standing.phaseId,
+      standing.groupId,
     );
   }
 }

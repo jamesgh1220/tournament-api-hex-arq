@@ -1,3 +1,5 @@
+import { StandingTournament } from "../value-objects/standing-tournament.vo";
+
 export interface InitialStandingInput {
   tournamentId: string;
   phaseId: string;
@@ -14,14 +16,14 @@ export interface StandingStatsInput {
   points: number;
 }
 
-// TODO: crear type de respuesta
 export interface StandingSetupPort {
-  exists(tournamentId: string, phaseId: string): Promise<boolean>;
+  exists(tournamentId: string, phaseId: string): Promise<StandingTournament>;
+  // TODO: crear type de respuesta
   initialize(standings: InitialStandingInput[]);
   update(
     tournamentId: string,
     phaseId: string,
     teamId: string,
     stats: StandingStatsInput,
-  );
+  ): Promise<StandingTournament>;
 }

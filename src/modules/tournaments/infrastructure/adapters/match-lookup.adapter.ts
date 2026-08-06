@@ -8,6 +8,8 @@ import {
   UPDATE_MATCH_USE_CASE,
 } from 'src/modules/matches/match.tokens';
 import { MatchResult } from '../../domain/value-objects/match-result.vo';
+import { MatchTournament } from '../../domain/value-objects/match-tournament.vo';
+import { MatchResultStatus } from '../../domain/enums/match-result-status.enum';
 
 export class MatchLookupAdapter implements MatchLookupPort {
   constructor(
@@ -17,21 +19,42 @@ export class MatchLookupAdapter implements MatchLookupPort {
     private readonly updateMatchUseCase: UpdateMatchUseCase,
   ) {}
 
-  async matchExists(matchId: string): Promise<boolean> {
+  async matchExists(matchId: string): Promise<MatchTournament> {
     const match = await this.getMatchByParamsUseCase.execute({
       id: matchId,
     });
 
-    return !!match;
+    return new MatchTournament(
+      match.id,
+      match.phaseId,
+      match.homeTeamId,
+      match.awayTeamId,
+      match.homeScore,
+      match.awayScore,
+      match.status as unknown as MatchResultStatus,
+      match.scheduledAt,
+      match.groupId,
+    );
   }
 
-  // TODO: tipar respuesta
-  async update(matchId: string, result: MatchResult) {
-    return await this.updateMatchUseCase.execute(matchId, {
+  async update(matchId: string, result: MatchResult): Promise<MatchTournament> {
+    const match = await this.updateMatchUseCase.execute(matchId, {
       homeScore: result.homeScore,
       awayScore: result.awayScore,
       // Traducción en el borde: MatchResultStatus → MatchStatus
       status: result.status as unknown as MatchStatus,
     });
+
+    return new MatchTournament(
+      match.id,
+      match.phaseId,
+      match.homeTeamId,
+      match.awayTeamId,
+      match.homeScore,
+      match.awayScore,
+      match.status as unknown as MatchResultStatus,
+      match.scheduledAt,
+      match.groupId,
+    );
   }
 }
