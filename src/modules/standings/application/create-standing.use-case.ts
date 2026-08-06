@@ -1,3 +1,4 @@
+import { StandingPersistenceError } from '../domain/errors';
 import { StandingGenerator } from '../domain/service/standing-generator';
 import { Standing } from '../domain/standing.entity';
 import { StandingRepositoryPort } from '../domain/standing.repository.port';
@@ -10,10 +11,11 @@ export class CreateStandingUseCase {
   ) {}
 
   async execute(standings: InitialStanding[]): Promise<Standing[]> {
-    // TODO: trycatch
     const initialStandings =
       this.standingGenerator.initialStandingLeague(standings);
-    await this.standingRepository.createMany(initialStandings);
+    const savedStandings = await this.standingRepository.createMany(initialStandings);
+
+    if (!initialStandings || !savedStandings) throw new StandingPersistenceError();
 
     return initialStandings;
   }

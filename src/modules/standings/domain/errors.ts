@@ -17,3 +17,12 @@ export class StandingNotFoundError extends DomainError {
     super(`Tabla de posiciones con torneo id ${id} no encontrado`);
   }
 }
+
+export class StandingPersistenceError extends DomainError {
+  readonly code = 'STANDING_PERSISTENCE_ERROR';
+  readonly statusCode = 500;
+
+  constructor(message?: string) {
+    super(message ?? 'Error al guardar la tabla de posiciones');
+  }
+}

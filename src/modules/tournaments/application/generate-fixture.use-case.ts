@@ -2,6 +2,7 @@ import {
   TournamentNotFoundError,
   PhaseActiveByTournamentNotFoundError,
   PhaseHasAssignedFixtureError,
+  StandingAlreadyExistsError,
 } from '../domain/errors';
 import { TournamentRepositoryPort } from '../domain/tournament.repository.port';
 import { FixtureGenerationPort } from '../domain/ports/fixture-generation.port';
@@ -39,6 +40,12 @@ export class GenerateFixtureUseCase {
       activePhase.id,
     );
     if (phaseHasFixture) throw new PhaseHasAssignedFixtureError(activePhase.id);
+
+    const standing = await this.standingSetup.exists(
+      tournamentId,
+      activePhase.id,
+    );
+    if (standing) throw new StandingAlreadyExistsError(tournamentId, activePhase.id);
 
     return this.unitOfWork.execute(async () => {
       const { teams, startDate, configuration } = tournament;

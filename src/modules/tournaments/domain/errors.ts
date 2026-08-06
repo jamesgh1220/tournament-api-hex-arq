@@ -138,3 +138,12 @@ export class StandingNotFoundError extends DomainError {
     super(`Tabla de posiciones con torneo id ${id} y fase id ${phaseId} no encontrado`);
   }
 }
+
+export class StandingAlreadyExistsError extends DomainError {
+  readonly code = 'STANDING_ALREADY_EXISTS';
+  readonly statusCode = 409;
+
+  constructor(id: string, phaseId: string) {
+    super(`Tabla de posiciones con torneo id ${id} y fase id ${phaseId} ya existe`);
+  }
+}
