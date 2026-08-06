@@ -1,8 +1,7 @@
 import { MatchResult } from '../value-objects/match-result.vo';
 
 export interface MatchLookupPort {
-  // TODO: tipar respuesta
-  matchExists(matchId: string);
+  matchExists(matchId: string): Promise<boolean>;
   // TODO: tipar respuesta
   update(matchId: string, result: MatchResult);
 }

@@ -23,12 +23,13 @@ export class StandingSetupAdapter implements StandingSetupPort {
     private readonly updateStandingAfterMatchUseCase: UpdateStandingAfterMatchUseCase,
   ) {}
 
-  // TODO: tipar respuesta
-  async exists(tournamentId: string, phaseId: string) {
-    return await this.getStandingByPhaseTournamentUseCase.execute(
+  async exists(tournamentId: string, phaseId: string): Promise<boolean> {
+    const standing = await this.getStandingByPhaseTournamentUseCase.execute(
       tournamentId,
       phaseId,
     );
+
+    return !!standing;
   }
   // TODO: tipar respuesta
   async initialize(standings: InitialStandingInput[]) {

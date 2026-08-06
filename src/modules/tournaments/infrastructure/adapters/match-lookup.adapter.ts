@@ -17,11 +17,12 @@ export class MatchLookupAdapter implements MatchLookupPort {
     private readonly updateMatchUseCase: UpdateMatchUseCase,
   ) {}
 
-  // TODO: tipar respuesta
-  async matchExists(matchId: string) {
-    return await this.getMatchByParamsUseCase.execute({
+  async matchExists(matchId: string): Promise<boolean> {
+    const match = await this.getMatchByParamsUseCase.execute({
       id: matchId,
     });
+
+    return !!match;
   }
 
   // TODO: tipar respuesta

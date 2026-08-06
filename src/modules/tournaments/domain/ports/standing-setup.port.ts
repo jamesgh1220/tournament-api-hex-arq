@@ -16,7 +16,7 @@ export interface StandingStatsInput {
 
 // TODO: crear type de respuesta
 export interface StandingSetupPort {
-  exists(tournamentId: string, phaseId: string);
+  exists(tournamentId: string, phaseId: string): Promise<boolean>;
   initialize(standings: InitialStandingInput[]);
   update(
     tournamentId: string,

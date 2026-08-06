@@ -41,6 +41,7 @@ export class GenerateFixtureUseCase {
     );
     if (phaseHasFixture) throw new PhaseHasAssignedFixtureError(activePhase.id);
 
+    // Validar que ese torneo no tenga la tabla ya creada
     const standing = await this.standingSetup.exists(
       tournamentId,
       activePhase.id,
@@ -65,7 +66,6 @@ export class GenerateFixtureUseCase {
         doubleRound: configuration?.doubleRound || true,
       });
 
-      // luego: standingSetup.initialize(...)
       const standings = (tournament.teams ?? []).map((team) => ({
         tournamentId,
         phaseId: activePhase.id,
@@ -73,7 +73,6 @@ export class GenerateFixtureUseCase {
         // No se envia groupId por ahora hasta que se hagan los otros tipos de torneos
       }));
 
-      // TODO: validar que ese torneo no tenga la tabla ya creada
       await this.standingSetup.initialize(standings);
 
       return matches;

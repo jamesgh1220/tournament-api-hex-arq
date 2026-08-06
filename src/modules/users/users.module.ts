@@ -47,7 +47,6 @@ import { UserPort } from './domain/login.port';
       provide: USER_REPOSITORY,
       useClass: UserRepository,
     },
-    // TODO: pedir explicacion en palabras 'normales' de que hace esto
     {
       provide: CREATE_USER_USE_CASE,
       useFactory: (userAdapter: UserPort, userRepository: UserRepositoryPort) =>
