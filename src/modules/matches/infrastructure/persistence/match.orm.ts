@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { GroupOrmEntity } from 'src/modules/groups/infrastructure/persistence/group.orm';
 import { PhaseOrmEntity } from 'src/modules/phases/infrastructure/persistence/phase.orm';
+import { MatchStatus } from '../../domain/enums/match-status.enum';
 
 @Entity('matches')
 export class MatchOrmEntity {
@@ -46,7 +47,7 @@ export class MatchOrmEntity {
   @Column()
   awayScore: number;
 
-  @Column({ default: 'TO_COME' })
+  @Column({ default: MatchStatus.TO_COME })
   status: string;
 
   @Column({ type: 'date' })

@@ -1,10 +1,12 @@
+import { MatchStatus } from './enums/match-status.enum';
+
 export interface MatchUpdateData {
   phaseId?: string;
   homeTeamId?: string;
   awayTeamId?: string;
   homeScore?: number;
   awayScore?: number;
-  status?: string;
+  status?: MatchStatus;
   scheduledAt?: Date;
   groupId?: string | null;
 }
@@ -17,7 +19,7 @@ export class Match {
     private readonly _awayTeamId: string,
     private readonly _homeScore: number,
     private readonly _awayScore: number,
-    private readonly _status: string,
+    private readonly _status: MatchStatus,
     private readonly _scheduledAt: Date,
     private readonly _groupId?: string | null,
   ) {}
@@ -29,14 +31,14 @@ export class Match {
     awayTeamId: string,
     homeScore: number,
     awayScore: number,
-    status: string,
+    status: MatchStatus,
     scheduledAt: Date,
     groupId?: string | null,
   ): Match {
     if (homeScore < 0 || awayScore < 0) {
       throw new Error('Los goles no pueden ser negativos');
     }
-    if (status !== 'TO_COME' && status !== 'FINISHED') {
+    if (!Object.values(MatchStatus).includes(status)) {
       throw new Error('El estado del partido no es válido');
     }
     if (scheduledAt < new Date()) {
@@ -76,7 +78,7 @@ export class Match {
       props.awayTeamId,
       props.homeScore,
       props.awayScore,
-      props.status,
+      props.status as MatchStatus,
       props.scheduledAt,
       props.groupId,
     );
@@ -110,7 +112,7 @@ export class Match {
     return this._awayScore;
   }
 
-  get status(): string {
+  get status(): MatchStatus {
     return this._status;
   }
 
@@ -127,7 +129,7 @@ export class Match {
     if (homeScore < 0 || awayScore < 0) {
       throw new Error('Los goles no pueden ser negativos');
     }
-    if (status !== 'TO_COME' && status !== 'FINISHED') {
+    if (!Object.values(MatchStatus).includes(status)) {
       throw new Error('El estado del partido no es válido');
     }
     if (data.scheduledAt !== undefined && data.scheduledAt < new Date()) {

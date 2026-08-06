@@ -6,6 +6,7 @@ import {
   IsString,
   Min,
 } from 'class-validator';
+import { MatchStatus } from '../../../domain/enums/match-status.enum';
 
 export class UpdateMatchDto {
   @IsOptional()
@@ -31,8 +32,8 @@ export class UpdateMatchDto {
   awayScore?: number;
 
   @IsOptional()
-  @IsIn(['TO_COME', 'FINISHED'])
-  status?: string;
+  @IsIn(Object.values(MatchStatus))
+  status?: MatchStatus;
 
   @IsOptional()
   @IsDateString()

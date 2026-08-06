@@ -1,18 +1,18 @@
 import { MatchRepositoryPort } from '../domain/match.repository.port';
 import { Match } from '../domain/match.entity';
+import { MatchStatus } from '../domain/enums/match-status.enum';
 import { randomUUID } from 'crypto';
 
 export class CreateMatchUseCase {
   constructor(private readonly matchRepository: MatchRepositoryPort) {}
 
-  // async execute(phaseId: number, groupId: number, homeTeamId: string, awayTeamId: string, homeScore: number, awayScore: number, status: string, scheduledAt: Date): Promise<Match> {
   async execute(
     phaseId: string,
     homeTeamId: string,
     awayTeamId: string,
     homeScore: number,
     awayScore: number,
-    status: string,
+    status: MatchStatus,
     scheduledAt: Date,
     groupId: string,
   ): Promise<Match> {

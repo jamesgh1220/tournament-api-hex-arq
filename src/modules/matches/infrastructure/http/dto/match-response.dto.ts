@@ -1,4 +1,5 @@
 import { Match } from 'src/modules/matches/domain/match.entity';
+import { MatchStatus } from 'src/modules/matches/domain/enums/match-status.enum';
 
 export class MatchResponseDto {
   id: string;
@@ -6,7 +7,7 @@ export class MatchResponseDto {
   awayTeamId: string;
   homeScore: number;
   awayScore: number;
-  status: string;
+  status: MatchStatus;
   scheduledAt: Date;
 
   static fromDomain(match: Match): MatchResponseDto {

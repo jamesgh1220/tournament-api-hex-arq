@@ -1,4 +1,5 @@
 import { randomUUID } from 'crypto';
+import { MatchStatus } from '../enums/match-status.enum';
 import { Match } from '../match.entity';
 
 export type FixtureGenerationInput = {
@@ -51,7 +52,7 @@ export class FixtureGenerator {
             awayTeamId,
             0,
             0,
-            'TO_COME', // TODO: pasar a un enum general
+            MatchStatus.TO_COME,
             scheduledAt,
             groupId,
           ),

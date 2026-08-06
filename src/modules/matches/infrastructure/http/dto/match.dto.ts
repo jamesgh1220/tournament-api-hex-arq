@@ -6,6 +6,7 @@ import {
   IsString,
   IsIn,
 } from 'class-validator';
+import { MatchStatus } from '../../../domain/enums/match-status.enum';
 
 export class MatchDto {
   @IsInt()
@@ -32,8 +33,8 @@ export class MatchDto {
   awayScore: number;
 
   @IsString()
-  @IsIn(['TO_COME', 'FINISHED'])
-  status: string;
+  @IsIn(Object.values(MatchStatus))
+  status: MatchStatus;
 
   @IsDateString()
   scheduledAt: string;
